@@ -39,6 +39,11 @@ class RegistrationForm(UserCreationForm):
         widget=forms.PasswordInput(attrs={"placeholder": "Enter your password again", "class": "form-control"}),
     )
     
+    receive_news_and_promotions = forms.BooleanField(
+        label="I agree to the terms and conditions",
+    )
+
+    
     class Meta:
         model = User
         fields = ["first_name", "last_name", "email", "password1", "password2"]

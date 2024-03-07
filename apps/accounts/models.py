@@ -14,7 +14,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
     is_email_verified = models.BooleanField(default=False)
-    terms_agreement = models.BooleanField(default=False)
+    receive_news_and_promotions = models.BooleanField(default=False)
     
     photo = models.ImageField(upload_to="photos/%Y/%m/%d/", null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
