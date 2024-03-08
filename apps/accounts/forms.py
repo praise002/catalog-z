@@ -19,34 +19,43 @@ class RegistrationForm(UserCreationForm):
     first_name = forms.CharField(
         validators=[validate_name],
         max_length=50,
-        widget=forms.TextInput(attrs={"placeholder": "Enter your first name", "class": "form-control"})
+        widget=forms.TextInput(attrs={"placeholder": "Your first name", "class": "form-control"})
     )
     last_name = forms.CharField(
         validators=[validate_name],
         max_length=50,
-        widget=forms.TextInput(attrs={"placeholder": "Enter your first name", "class": "form-control"})
+        widget=forms.TextInput(attrs={"placeholder": "Your last name", "class": "form-control"})
     )
     email = forms.EmailField(
         error_messages={"unique": _("Email already registered")},
-        widget=forms.EmailInput(attrs={"placeholder": "Enter your email address", "class": "form-control"}),
+        widget=forms.EmailInput(attrs={"placeholder": "Email", "class": "form-control"}),
     )
     password1 = forms.CharField(
         label="Password",
-        widget=forms.PasswordInput(attrs={"placeholder": "Enter your password", "class": "form-control"}),
+        widget=forms.PasswordInput(attrs={"placeholder": "Password", "class": "form-control"}),
     )
     password2 = forms.CharField(
         label="Confirm Password",
-        widget=forms.PasswordInput(attrs={"placeholder": "Enter your password again", "class": "form-control"}),
+        widget=forms.PasswordInput(attrs={"placeholder": "Repeat your password", "class": "form-control"}),
     )
     
     receive_news_and_promotions = forms.BooleanField(
-        label="I agree to the terms and conditions",
+        required=False,
+        label="I do not wish to receive news and promotions from Catalog-Z Company by email.",
+        widget=forms.CheckboxInput(attrs={"class": "form-check-input me-2"}),
     )
 
     
     class Meta:
         model = User
-        fields = ["first_name", "last_name", "email", "password1", "password2"]
+        fields = [
+            "first_name", 
+            "last_name", 
+            "email", 
+            "password1", 
+            "password2",
+            "receive_news_and_promotions",
+            ]
     
     def _post_clean(self):
         super(RegistrationForm, self)._post_clean()
@@ -54,7 +63,7 @@ class RegistrationForm(UserCreationForm):
         if len(password1) < 8:
             self.add_error("password1", "Password too short")
 
-class LoginForm(forms.Form):
+class LoginForm(forms.Form):  #TODO: ADD REMEMBER ME
     email = forms.EmailField(
         widget=forms.EmailInput(attrs={"placeholder": "Enter your email address"}),
     )
