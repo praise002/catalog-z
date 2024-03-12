@@ -1,0 +1,16 @@
+{% extends 'common/base.html' %} 
+
+{% block title %} Email Verification Failed {% endblock %}
+{% block content %}
+
+  <div class="card custom-card" style="padding: 10em 30em 5em 30em">
+    <div class="card-header">
+      <h5 class="card-title">Email Verification Failed</h5>
+    </div>
+    <div class="card-body">
+      <p>Sorry! This link is invalid, expired or has been used already!.</p>
+      <p>To receive a new email <a href="{% url "accounts:resend_verification_email" %}">Click Here!</a></p>
+    </div>
+  </div>
+
+{% endblock %}

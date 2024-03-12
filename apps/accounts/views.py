@@ -72,10 +72,16 @@ class LoginView(LogoutRequiredMixin, View):
                 return render(request, 
                       'accounts/email_verification_sent.html',
                       {'form': form})
+            
+            # Check if remember_me is selected
+            remember_me = request.POST.get("remember_me")
+            if remember_me:
+                # Set session expiry to 1 month
+                request.session.set_expiry(2629800) # 1 month in seconds
                 
             # passes all above test, login user
             login(request, user)
-            return redirect('voteapp:home')
+            return redirect('gallery:home')
         
         context = {"form": form}
         return render(request, "accounts/login.html", context)
@@ -166,3 +172,5 @@ class LogoutView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs): # if it doesnt work change to get
         logout(request)
         return redirect('accounts:login')
+    
+# TODO: LOGOUT FROM ALL DEVICES

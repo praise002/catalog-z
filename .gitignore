@@ -161,3 +161,5 @@ cython_debug/
 #.idea/
 remind.txt
 templatemo_556_catalog_z
+register2.html
+login2.html

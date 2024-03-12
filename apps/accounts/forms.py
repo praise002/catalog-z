@@ -63,12 +63,18 @@ class RegistrationForm(UserCreationForm):
         if len(password1) < 8:
             self.add_error("password1", "Password too short")
 
-class LoginForm(forms.Form):  #TODO: ADD REMEMBER ME
+class LoginForm(forms.Form):
     email = forms.EmailField(
-        widget=forms.EmailInput(attrs={"placeholder": "Enter your email address"}),
+        widget=forms.EmailInput(attrs={"placeholder": "Email address"}),
     )
     password = forms.CharField(
-        widget=forms.PasswordInput(attrs={"placeholder": "Enter your password"}),
+        widget=forms.PasswordInput(attrs={"placeholder": "Password"}),
+    )
+    remember_me = forms.BooleanField(
+        required=False,
+        label="Remember me",
+        widget=forms.CheckboxInput(attrs={"class": "form-check-input me-2",
+                                          }), # 'style': 'transform: scale(0.5); margin-top: 0; '
     )
     
 class CustomPasswordResetForm(PasswordResetForm):
