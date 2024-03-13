@@ -1,13 +1,15 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-import uuid
+from django.conf import settings
+from autoslug import AutoSlugField
+from apps.common.models import BaseModel
 
-class Photo(models.Model):
-    id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True)
+class Photo(BaseModel):
     title = models.CharField(_("Title"), max_length=200)
+    slug = AutoSlugField(populate_from="title", unique=True, always_update=True)
     description = models.TextField(default="Aliquam varius posuere nunc, nec imperdiet neque condimentum at. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Please support us by contributing a small donation via PayPal.")
     photo = models.ImageField(upload_to="photos/%Y/%m/%d/")  
-    created_at = models.DateField(auto_now_add=True)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="photos", on_delete=models.CASCADE)
     views = models.PositiveIntegerField(default=0)  
     downloads = models.PositiveIntegerField(default=0)  
     dimension = models.CharField(max_length=50)  
@@ -19,12 +21,12 @@ class Photo(models.Model):
     def __str__(self):
         return self.title
     
-class Video(models.Model):
-    id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True)
+class Video(BaseModel):
     title = models.CharField(_("Title"), max_length=200)
+    slug = AutoSlugField(populate_from="title", unique=True, always_update=True)
     description = models.TextField(default="Aliquam varius posuere nunc, nec imperdiet neque condimentum at. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Please support us by contributing a small donation via PayPal.")
     video = models.FileField(upload_to="videos//%Y/%m/%d/")
-    created_at = models.DateField(auto_now_add=True)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="videos", on_delete=models.CASCADE)
     views = models.PositiveIntegerField(default=0)  
     downloads = models.PositiveIntegerField(default=0)  
     resolution = models.CharField(max_length=50)  
@@ -37,7 +39,7 @@ class Video(models.Model):
     def __str__(self):
         return self.title
 
-class Tag(models.Model):
+class Tag(models.Model):  #TODO: Might split to a different app
     name = models.CharField(_("Name"), max_length=50)
 
     def __str__(self):
