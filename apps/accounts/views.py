@@ -134,8 +134,6 @@ class ResendVerificationEmail(LogoutRequiredMixin, View):
         
         try:
             user = User.objects.get(email=email)
-            print(user)
-            print(user.id)
         except User.DoesNotExist:
             sweetify.error(self.request, 'Not allowed')
             return redirect(reverse('accounts:login'))
@@ -172,5 +170,9 @@ class LogoutView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs): # if it doesnt work change to get
         logout(request)
         return redirect('accounts:login')
-    
-# TODO: LOGOUT FROM ALL DEVICES
+
+class LogoutAllDevices(LoginRequiredMixin, View):
+    def get(self, request):
+        logout(request)
+        request.session.flush()  # Clear all session data
+        return redirect('gallery:home')  # Redirect to the home page or any other desired page

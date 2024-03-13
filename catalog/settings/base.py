@@ -30,6 +30,7 @@ SITE_ID = 1
 
 DJANGO_APPS = [
     # 'jazzmin',
+    # 'apps.accounts.apps.AccountsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

@@ -9,6 +9,7 @@ urlpatterns = [
     path('register/', views.RegisterView.as_view(), name='register'),
     path('login/', views.LoginView.as_view(), name='login'),
     path('logout/', views.LogoutView.as_view(), name='logout'),
+    path('logout-all-devices/', views.LogoutAllDevices.as_view(), name='logout_all_devices'),
     
     # Email verification
     path('verify-email/<uidb64>/<token>/<user_id>/', 
@@ -29,23 +30,23 @@ urlpatterns = [
 
     # reset password urls
     path(
-        'password-reset/',
+        'reset-password/',
         views.CustomPasswordResetView.as_view(
             html_email_template_name='accounts/password_reset_html_email.html',
             success_url = reverse_lazy("accounts:password_reset_done")
         ),
-        name='password_reset',
+        name='reset_password',
     ),
         
-    path('password-reset/done/',
+    path('reset-password/done/',
          views.CustomPasswordResetDoneView.as_view(),
          name='password_reset_done'),
-    path('password-reset/<uidb64>/<token>/',
+    path('reset-password/<uidb64>/<token>/',
          views.CustomPasswordResetConfirmView.as_view(
             success_url = reverse_lazy("accounts:password_reset_complete"),
         ),
          name='password_reset_confirm'),
-    path('password-reset/complete/',
+    path('reset-password/complete/',
          views.CustomPasswordResetCompleteView.as_view(),
          name='password_reset_complete'),
 ]
