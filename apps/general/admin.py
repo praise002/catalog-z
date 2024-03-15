@@ -42,5 +42,9 @@ class AddressAdmin(admin.ModelAdmin):
         return False
 
 class EmployeeAdmin(admin.ModelAdmin):  #TODO: 4 employees to be displayed
-    list_display = ("name")
+    list_display = ("name",)
 
+admin.site.register(SiteDetail, SiteDetailAdmin)
+admin.site.register(Contact, ContactAdmin)
+admin.site.register(Address, AddressAdmin)
+admin.site.register(Employee, EmployeeAdmin)
