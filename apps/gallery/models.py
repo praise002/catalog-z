@@ -2,6 +2,8 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 from autoslug import AutoSlugField
+from cloudinary_storage.storage import VideoMediaCloudinaryStorage
+from cloudinary_storage.validators import validate_video
 from apps.common.models import BaseModel
 
 class Photo(BaseModel):
@@ -25,7 +27,9 @@ class Video(BaseModel):
     title = models.CharField(_("Title"), max_length=200)
     slug = AutoSlugField(populate_from="title", unique=True, always_update=True)
     description = models.TextField(default="Aliquam varius posuere nunc, nec imperdiet neque condimentum at. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Please support us by contributing a small donation via PayPal.")
-    video = models.FileField(upload_to="videos//%Y/%m/%d/")
+    video = models.FileField(upload_to="videos/%Y/%m/%d/",
+                             storage=VideoMediaCloudinaryStorage(),
+                             validators=[validate_video])
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="videos", on_delete=models.CASCADE)
     views = models.PositiveIntegerField(default=0)  
     downloads = models.PositiveIntegerField(default=0)  
