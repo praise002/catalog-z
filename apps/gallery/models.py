@@ -6,11 +6,34 @@ from cloudinary_storage.storage import VideoMediaCloudinaryStorage
 from cloudinary_storage.validators import validate_video
 from apps.common.models import BaseModel
 
+class Category(models.Model):
+    name = models.CharField(_("Name"), max_length=50)
+    slug = AutoSlugField(populate_from="name", unique=True, always_update=True)
+    image = models.ImageField(default="fallback.jpg", upload_to="category/%Y/%m/%d/")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True) 
+    
+    # TODO: FIX ISSUE WITH DEFAULT IMAGE NOT WORKING
+    @property
+    def image_url(self):
+        try:
+            url = self.image.url
+        except:
+            url = "/static/media/fallback.jpg"
+        return url  # TODO: TEST IF IT WORKS
+
+    
+    class Meta:
+        verbose_name_plural = "Categories"
+
+    def __str__(self):
+        return self.name
+
 class Photo(BaseModel):
     title = models.CharField(_("Title"), max_length=200)
     slug = AutoSlugField(populate_from="title", unique=True, always_update=True)
     description = models.TextField(default="Aliquam varius posuere nunc, nec imperdiet neque condimentum at. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Please support us by contributing a small donation via PayPal.")
-    photo = models.ImageField(upload_to="photos/%Y/%m/%d/")  
+    photo = models.ImageField(default="fallback.jpg", upload_to="photos/%Y/%m/%d/")  
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="photos", on_delete=models.CASCADE)
     views = models.PositiveIntegerField(default=0)  
     downloads = models.PositiveIntegerField(default=0)  
@@ -19,6 +42,7 @@ class Photo(BaseModel):
     license = models.TextField(_("License"), 
                                default="Free for both personal and commercial use. No need to pay anything. No need to make any attribution.") 
     tags = models.ManyToManyField("Tag", related_name="photos")  
+    category = models.ForeignKey(Category, related_name="photos", on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return self.title
@@ -27,9 +51,9 @@ class Video(BaseModel):
     title = models.CharField(_("Title"), max_length=200)
     slug = AutoSlugField(populate_from="title", unique=True, always_update=True)
     description = models.TextField(default="Aliquam varius posuere nunc, nec imperdiet neque condimentum at. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Please support us by contributing a small donation via PayPal.")
-    video = models.FileField(upload_to="videos/%Y/%m/%d/",
+    video = models.FileField(default="video/hero.mp4", upload_to="videos/%Y/%m/%d/",
                              storage=VideoMediaCloudinaryStorage(),
-                             validators=[validate_video])
+                             validators=[validate_video])  # TODO: FIX DEFAULT
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="videos", on_delete=models.CASCADE)
     views = models.PositiveIntegerField(default=0)  
     downloads = models.PositiveIntegerField(default=0)  
@@ -39,6 +63,7 @@ class Video(BaseModel):
     license = models.TextField(_("License"), 
                                default="Free for both personal and commercial use. No need to pay anything. No need to make any attribution.") 
     tags = models.ManyToManyField("Tag", related_name="videos")  
+    category = models.ForeignKey(Category, related_name="videos", on_delete=models.CASCADE, blank=True, null=True)
     
     def __str__(self):
         return self.title

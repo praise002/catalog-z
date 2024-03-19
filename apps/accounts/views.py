@@ -170,6 +170,7 @@ class LogoutView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs): # if it doesnt work change to get
         logout(request)
         return redirect('accounts:login')
+        # return redirect('gallery:home')
 
 class LogoutAllDevices(LoginRequiredMixin, View):
     def get(self, request):
