@@ -7,54 +7,79 @@
     <input class="form-control tm-search-input" type="search" placeholder="Search" aria-label="Search">
     <button class="btn btn-outline-success tm-search-btn" type="submit">
       <i class="fas fa-search"></i>
-  </button>
+    </button>
   </form>
 </div>
 
 <div class="container-fluid tm-container-content tm-mt-60">
   <div class="row mb-4">
     <h2 class="col-6 tm-text-primary">
-      Categories
+      Explore Categories
     </h2>
-    <div class="col-6 d-flex justify-content-end align-items-center">
-      <form action="" class="tm-text-primary">
-        Page <input type="text" value="1" size="1" class="tm-input-paging tm-text-primary"> of 200
-      </form>
-    </div>
   </div>
   <div class="row tm-mb-90 tm-gallery">
-    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-      <figure class="effect-ming tm-video-item">
-        <img src="{% static 'img/img-03.jpg' %}" alt="Image" class="img-fluid">
-        <figcaption class="d-flex align-items-center justify-content-center">
-          <h2>Clocks</h2>
-          <a href="photo-detail.html">View more</a>
-        </figcaption>
-      </figure>
-      <div class="d-flex justify-content-between tm-text-gray">
-        <p>Category Name</p>
+    {% for category in categories %}
+      <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
+        <div class="card">
+          <figure class="effect-ming tm-video-item">
+            <img src="{{ category.image_url }}" alt="{{ category.name }}" class="card-img-top img-fluid" style="height: 200px; object-fit: cover;">
+            <figcaption class="d-flex align-items-center justify-content-center">
+              <h2>{{ category.name }}</h2>
+              <a href="photo-detail.html">View more</a>
+            </figcaption>                    
+          </figure>
+          <div class="card-body">
+            <h5 class="card-title">{{ category.name }}</h5>
+          </div>
+        </div>
       </div>
+    {% endfor %}
+    
+    {% if trending_photos %}
+    <div class="col-12">
+      <h2 class="col-6 tm-text-primary">Trending Photos</h2>
     </div>
-    <p>Explore Collections</p>
-    <p>Featured Content</p>
-    <p>Featured Creators</p>
-    <p>Trending Content</p>
-    <p>Latest Photos and Videos</p>
+    {% for photo in trending_photos %}
+      <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
+        <div class="card">
+          <figure class="effect-ming tm-video-item">
+            <img src="{{ photo.photo.url }}" alt="{{ photo.title }}" class="card-img-top img-fluid" style="height: 200px; object-fit: cover;">
+            <figcaption class="d-flex align-items-center justify-content-center">
+              <h2>{{ photo.caption }}</h2>
+              <a href="photo-detail.html">View more</a>
+            </figcaption>                    
+          </figure>
+          <div class="card-body">
+            <h5 class="card-title">{{ photo.title }}</h5>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+    {% endif %}
 
-  </div> <!-- row -->
-  <div class="row tm-mb-90">
-    <div class="col-12 d-flex justify-content-between align-items-center tm-paging-col">
-      <a href="javascript:void(0);" class="btn btn-primary tm-btn-prev mb-2 disabled">Previous</a>
-      <div class="tm-paging d-flex">
-        <a href="javascript:void(0);" class="active tm-paging-link">1</a>
-        <a href="javascript:void(0);" class="tm-paging-link">2</a>
-        <a href="javascript:void(0);" class="tm-paging-link">3</a>
-        <a href="javascript:void(0);" class="tm-paging-link">4</a>
-      </div>
-      <a href="javascript:void(0);" class="btn btn-primary tm-btn-next">Next Page</a>
+    <div class="col-12">
+      <h2 class="col-6 tm-text-primary">Latest Photos</h2>
     </div>
-  </div>
+    {% for photo in latest_photos %}
+      <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
+        <div class="card">
+          <figure class="effect-ming tm-video-item">
+            <img src="{{ photo.photo.url }}" alt="{{ photo.title }}" class="card-img-top img-fluid" style="height: 200px; object-fit: cover;">
+            <figcaption class="d-flex align-items-center justify-content-center">
+              <h2>{{ photo.caption }}</h2>
+              <a href="photo-detail.html">View more</a>
+            </figcaption>                    
+          </figure>
+          <div class="card-body">
+            <h5 class="card-title">{{ photo.title }}</h5>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div> <!-- row -->
+
 </div> <!-- container-fluid, tm-container-content -->
 
-
 {% endblock %}
+
+{% comment %} TODO: ADD INFINITE SCROLL {% endcomment %}
