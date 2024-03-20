@@ -21,5 +21,18 @@ class HomeView(View):
             "latest_photos": latest_photos,
         }
         return render(request, 'gallery/home.html', context)
-    
-        
+
+class CategoryDetailView(View):
+    pass
+
+class PhotoListView(View):
+    pass
+
+class PhotoDetailView(View):
+    pass
+
+class VideoListView(View):
+    pass
+     
+class VideoDetailView(View):
+    pass
