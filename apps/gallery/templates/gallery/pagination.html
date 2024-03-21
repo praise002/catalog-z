@@ -1,0 +1,13 @@
+<div class="row tm-mb-90">
+  <div class="col-12 d-flex justify-content-between align-items-center tm-paging-col">
+    <a href="{% if photo_list.has_previous %}?page={{ photo_list.previous_page_number }}{% else %}javascript:void(0);{% endif %}" 
+      class="btn btn-primary tm-btn-prev mb-2 {% if not photo_list.has_previous %}disabled{% endif %}">Previous</a>
+    <div class="tm-paging d-flex">
+      {% for page in photo_list.paginator.page_range %}
+        <a href="?page={{ page }}" class="{% if page == photo_list.number %}active{% endif %} tm-paging-link">{{ page }}</a>
+      {% endfor %}
+    </div>
+    <a href="{% if photo_list.has_next %}?page={{ photo_list.next_page_number }}{% else %}javascript:void(0);{% endif %}"
+      class="btn btn-primary tm-btn-next {% if not photo_list.has_next %}disabled{% endif %}">Next Page</a>
+  </div>            
+  </div>

@@ -1,4 +1,5 @@
 {% extends "common/base.html" %}
+{% block title %}Catalog-Z{% endblock %}
 {% load static %}
 
 {% block content %}
@@ -25,7 +26,7 @@
             <img src="{{ category.image_url }}" alt="{{ category.name }}" class="card-img-top img-fluid" style="height: 200px; object-fit: cover;">
             <figcaption class="d-flex align-items-center justify-content-center">
               <h2>{{ category.name }}</h2>
-              <a href="photo-detail.html">View more</a>
+              <a href="{% url "gallery:category_detail" slug=category.slug %}">View more</a>
             </figcaption>                    
           </figure>
           <div class="card-body">
