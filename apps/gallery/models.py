@@ -72,6 +72,7 @@ class Video(BaseModel):
 
 class Tag(models.Model):  #TODO: Might split to a different app
     name = models.CharField(_("Name"), max_length=50)
+    slug = AutoSlugField(populate_from="name", unique=True, always_update=True)
 
     def __str__(self):
         return self.name

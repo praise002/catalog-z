@@ -47,7 +47,7 @@
             <img src="{{ photo.photo.url }}" alt="{{ photo.title }}" class="card-img-top img-fluid" style="height: 200px; object-fit: cover;">
             <figcaption class="d-flex align-items-center justify-content-center">
               <h2>{{ photo.caption }}</h2>
-              <a href="photo-detail.html">View more</a>
+              <a href="{% url "gallery:photo_detail" slug=photo.slug %}">View more</a>
             </figcaption>                    
           </figure>
           <div class="card-body">
@@ -68,7 +68,7 @@
             <img src="{{ photo.photo.url }}" alt="{{ photo.title }}" class="card-img-top img-fluid" style="height: 200px; object-fit: cover;">
             <figcaption class="d-flex align-items-center justify-content-center">
               <h2>{{ photo.caption }}</h2>
-              <a href="photo-detail.html">View more</a>
+              <a href="{% url "gallery:photo_detail" slug=photo.slug %}">View more</a>
             </figcaption>                    
           </figure>
           <div class="card-body">

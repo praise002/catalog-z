@@ -55,10 +55,61 @@ class PhotoListView(View):
         return render(request, "gallery/photos/photo_list.html", context)
 
 class PhotoDetailView(View):
-    pass
+    def get(self, request, *args, **kwargs):
+        photo = get_object_or_404(Photo, slug=kwargs["slug"])
+        
+        # Get related photos based on shared tags
+        related_photos = Photo.objects.filter(tags__in=photo.tags.all())\
+            .exclude(id=photo.id).distinct()
+            
+        context = {
+            "photo": photo,
+            "related_photos": related_photos
+        }
+        return render(request, "gallery/photos/photo_detail.html", context)
 
 class VideoListView(View):
-    pass
+    def get(self, request):
+        videos = Video.objects.all().order_by("-created_at")
+        paginator = Paginator(videos, 16)  # num of photos per page
+        page = request.GET.get("page")
+        
+        try:
+            video_list = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page
+            video_list = paginator.page(1)
+        except EmptyPage:
+            # If page is out of range, deliver last page of results
+            video_list = paginator.page(paginator.num_pages)
+        
+        context = {
+            "videos": videos,
+            "video_list": video_list
+        }    
+        return render(request, "gallery/videos/video_list.html", context)
      
 class VideoDetailView(View):
+    def get(self, request, *args, **kwargs):
+        video = get_object_or_404(Video, slug=kwargs["slug"])
+        
+         # Get related photos based on shared tags
+        related_videos = Video.objects.filter(tags__in=video.tags.all())\
+            .exclude(id=video.id).distinct()
+            
+        context = {
+            "video": video,
+            "related_videos": related_videos
+        }
+        return render(request, "gallery/videos/video_detail.html", context)
+    
+
+class PhotoListByTagView(View):
+    def get(self, request, *args, **kwargs):
+        tag_slug = kwargs.get("slug")
+        print(tag_slug)
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        photos = Photo.objects.filter(tags=tag)
+
+class DownloadFile():
     pass

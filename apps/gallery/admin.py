@@ -25,6 +25,7 @@ class VideoAdmin(admin.ModelAdmin):
 
 class TagAdmin(admin.ModelAdmin):
     list_display = ("name",)
+    readonly_fields = ("slug",)
 
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Photo, PhotoAdmin)
