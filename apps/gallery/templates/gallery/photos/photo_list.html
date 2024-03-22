@@ -9,7 +9,7 @@
       </h2>
       <div class="col-6 d-flex justify-content-end align-items-center">
         <form action="" class="tm-text-primary">
-          Page <input type="text" value="{{ photo_list.number }}" size="1" class="tm-input-paging tm-text-primary" id="pageInput" onkeypress="handleKeyPress(event)";> of {{ photo_list.paginator.num_pages }}
+          Page <input type="number" value="{{ photo_list.number }}" min="1" max="{{ photo_list.paginator.num_pages }}" class="tm-input-paging tm-text-primary" id="pageInput"> of {{ photo_list.paginator.num_pages }}
         </form>
       </div>
     </div>
@@ -39,8 +39,19 @@
 
   <script>
     function handleKeyPress(event) {
-      let pageNumberValue = document.querySelector("#pageInput").value;
-      console.log(pageNumberValue);
+      if (event.key === "Enter") {
+        // Prevent the default behavior of the "Enter" key
+        event.preventDefault();
+
+        // Retrieve the page number value
+        let pageNumberValue = document.querySelector("#pageInput").value;
+
+        // Redirect to the URL corresponding to the entered page number
+        location.href = "{% url "gallery:photo_list" %}?page=" + pageNumberValue;
+      }
     }
+    
+    document.querySelector("#pageInput").addEventListener("keydown", handleKeyPress);
   </script>
+  {% comment %} TODO: PREVENT PAGE FROM RELOADING {% endcomment %}
 {% endblock %}
