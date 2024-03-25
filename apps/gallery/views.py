@@ -61,6 +61,7 @@ class PhotoDetailView(View):
         # Get related photos based on shared tags
         related_photos = Photo.objects.filter(tags__in=photo.tags.all())\
             .exclude(id=photo.id).distinct()
+        
             
         context = {
             "photo": photo,
@@ -106,10 +107,19 @@ class VideoDetailView(View):
 
 class PhotoListByTagView(View):
     def get(self, request, *args, **kwargs):
-        tag_slug = kwargs.get("slug")
+        # tag_slug = kwargs.get("tag_slug")
+        tag_slug = kwargs["tag_slug"]
         print(tag_slug)
         tag = get_object_or_404(Tag, slug=tag_slug)
-        photos = Photo.objects.filter(tags=tag)
+        print(tag)
+        photos = Photo.objects.filter(tags__slug=tag_slug)
+        print(photos)
+        
+        context = {
+            "tag": tag,
+            "photos": photos
+        }
+        return render(request, "gallery/photos/photo_list.html", context)
 
 class DownloadFile():
     pass

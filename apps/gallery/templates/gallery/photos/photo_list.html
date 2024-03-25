@@ -4,9 +4,15 @@
 {% block content %}
   <div class="container-fluid tm-container-content tm-mt-60">
     <div class="row mb-4">
-      <h2 class="col-6 tm-text-primary">
-        Latest Photos
-      </h2>
+      {% if tag %}
+        <h2 class="col-6 tm-text-primary">
+          Photos tagged with "{{ tag.name }}"
+        </h2>
+      {% else %}
+        <h2 class="col-6 tm-text-primary">
+          Latest Photos
+        </h2>
+      {% endif %}
       <div class="col-6 d-flex justify-content-end align-items-center">
         <form action="" class="tm-text-primary">
           Page <input type="number" value="{{ photo_list.number }}" min="1" max="{{ photo_list.paginator.num_pages }}" class="tm-input-paging tm-text-primary" id="pageInput"> of {{ photo_list.paginator.num_pages }}
