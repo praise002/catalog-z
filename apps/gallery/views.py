@@ -121,5 +121,18 @@ class PhotoListByTagView(View):
         }
         return render(request, "gallery/photos/photo_list.html", context)
 
-class DownloadFile():
-    pass
+class VideoListByTagView(View):
+    def get(self, request, *args, **kwargs):
+        # tag_slug = kwargs.get("tag_slug")
+        tag_slug = kwargs["tag_slug"]
+        print(tag_slug)
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        print(tag)
+        videos = Video.objects.filter(tags__slug=tag_slug)
+        print(videos)
+        
+        context = {
+            "tag": tag,
+            "videos": videos
+        }
+        return render(request, "gallery/videos/video_list.html", context)

@@ -1,0 +1,91 @@
+{% extends "common/base.html" %}
+{% block title %}Videos{% endblock %}
+{% load static %}
+
+{% block content %}
+  <div class="tm-hero d-flex justify-content-center align-items-center" id="tm-video-container">
+    <video autoplay muted loop id="tm-video">
+        <source src="{% static 'video/hero.mp4' %}" type="video/mp4">
+    </video>  
+    <i id="tm-video-control-button" class="fas fa-pause"></i>
+    <form class="d-flex position-absolute tm-search-form">
+      <input class="form-control tm-search-input" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success tm-search-btn" type="submit">
+          <i class="fas fa-search"></i>
+      </button>
+    </form>
+  </div>
+
+  <div class="container-fluid tm-container-content tm-mt-60">
+    <div class="row mb-4">
+      {% if tag %}
+        <h2 class="col-6 tm-text-primary">
+          Videos tagged with "{{ tag.name }}"
+        </h2>
+      {% else %}
+        <h2 class="col-6 tm-text-primary">
+          Latest Videos
+        </h2>
+      {% endif %}
+      <div class="col-6 d-flex justify-content-end align-items-center">
+        <form action="" class="tm-text-primary">
+          Page <input type="number" value="{{ video_list.number }}" min="1" max="{{ video_list.paginator.num_pages }}" class="tm-input-paging tm-text-primary" id="pageInput"> of {{ video_list.paginator.num_pages }}
+        </form>
+      </div>
+    </div>
+    <div class="row tm-mb-90 tm-gallery">
+      {% for video in videos %}
+        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
+          <div class="card">
+            <figure class="effect-ming tm-video-item">
+              <video autoplay muted loop id="tm-video">
+                <source src="{{ video.video.url }}" type="video/mp4">
+              </video> 
+              <figcaption class="d-flex align-items-center justify-content-center">
+                <h2>{{ video.caption }}</h2>
+                <a href="{{ video.get_absolute_url }}">View more</a>
+              </figcaption>                    
+            </figure>
+            <div class="d-flex justify-content-between tm-text-gray">
+              <span class="tm-text-gray-light">{{ video.created_at|date:"d M Y" }}</span>
+              <span>{{ video.views }} views</span>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div> <!-- row -->
+
+    <div class="row tm-mb-90">
+      <div class="col-12 d-flex justify-content-between align-items-center tm-paging-col">
+        <a href="{% if video_list.has_previous %}?page={{ video_list.previous_page_number }}{% else %}javascript:void(0);{% endif %}" 
+          class="btn btn-primary tm-btn-prev mb-2 {% if not video_list.has_previous %}disabled{% endif %}">Previous</a>
+        <div class="tm-paging d-flex">
+          {% for page in video_list.paginator.page_range %}
+            <a href="?page={{ page }}" class="{% if page == video_list.number %}active{% endif %} tm-paging-link">{{ page }}</a>
+          {% endfor %}
+        </div>
+        <a href="{% if video_list.has_next %}?page={{ video_list.next_page_number }}{% else %}javascript:void(0);{% endif %}"
+          class="btn btn-primary tm-btn-next {% if not video_list.has_next %}disabled{% endif %}">Next Page</a>
+      </div>            
+      </div>
+
+  </div>
+
+  <script>
+    function handleKeyPress(event) {
+      if (event.key === "Enter") {
+        // Prevent the default behavior of the "Enter" key
+        event.preventDefault();
+
+        // Retrieve the page number value
+        let pageNumberValue = document.querySelector("#pageInput").value;
+
+        // Redirect to the URL corresponding to the entered page number
+        location.href = "{% url "gallery:video_list" %}?page=" + pageNumberValue;
+      }
+    }
+    
+    document.querySelector("#pageInput").addEventListener("keydown", handleKeyPress);
+  </script>
+  {% comment %} TODO: PREVENT PAGE FROM RELOADING {% endcomment %}
+{% endblock %}

@@ -74,6 +74,9 @@ class Video(BaseModel):
     
     def __str__(self):
         return self.title
+    
+    def get_absolute_url(self):
+        return reverse("gallery:video_detail", args=[self.slug])
 
 class Tag(models.Model):  #TODO: Might split to a different app
     name = models.CharField(_("Name"), max_length=50)
