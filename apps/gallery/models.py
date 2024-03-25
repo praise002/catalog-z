@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
+from django.urls import reverse
 from autoslug import AutoSlugField
 from cloudinary_storage.storage import VideoMediaCloudinaryStorage
 from cloudinary_storage.validators import validate_video
@@ -47,6 +48,10 @@ class Photo(BaseModel):
 
     def __str__(self):
         return self.title
+    
+    def get_absolute_url(self):
+        return reverse("gallery:photo_detail", args=[self.slug])
+    
     
 class Video(BaseModel):
     title = models.CharField(_("Title"), max_length=200)

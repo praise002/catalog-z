@@ -62,7 +62,7 @@
             <img src="{{ photo.photo.url }}" alt="{{ photo.title }}" class="img-fluid">
             <figcaption class="d-flex align-items-center justify-content-center">
               <h2>{{ photo.title }}</h2>
-              <a href="{% url "gallery:photo_detail" slug=photo.slug %}">View more</a>
+              <a href="{{ photo.get_absolute_url }}">View more</a>
             </figcaption>                    
           </figure>
           <div class="d-flex justify-content-between tm-text-gray">
