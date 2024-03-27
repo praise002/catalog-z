@@ -15,7 +15,7 @@ class ContactForm(ModelForm):
         # Add bootstrap form control to field classes
         for key in self.fields:
             print(key)
-            self.fields[key].widget.attrs["class"] = "form control rounded-0"
+            self.fields[key].widget.attrs["class"] = "form-control rounded-0"
             
         # Set placeholders for all fields
         self.fields["name"].widget.attrs["placeholder"] = "Name"
