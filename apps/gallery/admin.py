@@ -1,4 +1,7 @@
+from typing import Any
 from django.contrib import admin
+from moviepy.editor import VideoFileClip
+from io import BytesIO
 from .models import Photo, Video, Tag, Category
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -22,6 +25,17 @@ class VideoAdmin(admin.ModelAdmin):
     readonly_fields = ("slug",)
     date_hierarchy = 'created_at'
     ordering = ("created_at",)
+    
+    # def save_model(self, request, obj, form, change):
+    #     # calculate video duration
+    #     video_path = obj.video.url
+    #     clip =  VideoFileClip(video_path)
+    #     obj.duration = clip.duration
+    #     clip.close()
+            
+    #     # save the model instance
+    #     super().save_model(request, obj, form, change)
+    # TODO: WORK ON THIS
 
 class TagAdmin(admin.ModelAdmin):
     list_display = ("name",)

@@ -65,12 +65,13 @@ class Video(BaseModel):
     downloads = models.PositiveIntegerField(default=0)  
     resolution = models.CharField(max_length=50)  
     format = models.CharField(_("Format"), max_length=20)  
-    duration = models.DurationField()
+    duration = models.CharField(default="00:00:20")
     license = models.TextField(_("License"), 
                                default="Free for both personal and commercial use. No need to pay anything. No need to make any attribution.") 
     tags = models.ManyToManyField("Tag", related_name="videos")  
     caption = models.CharField(_("Caption"), max_length=10, default="Untitled")
     category = models.ForeignKey(Category, related_name="videos", on_delete=models.CASCADE, blank=True, null=True)
+    # thumbnail = models.CharField(max_length=15, blank=True, null=True)
     
     def __str__(self):
         return self.title

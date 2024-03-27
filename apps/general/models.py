@@ -82,7 +82,7 @@ class Employee(models.Model):
         return self.name
     
     @property
-    def avatar_url(self):
+    def photo_url(self):
         try:
             url = self.avatar.url
         except:
