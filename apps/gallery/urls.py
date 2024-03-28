@@ -15,5 +15,8 @@ urlpatterns = [
     path('videos/', views.VideoListView.as_view(), name="video_list"),
     path('videos/tag/<slug:tag_slug>/', views.VideoListByTagView.as_view(), name='video_list_by_tag'),
     path('video/<slug:slug>/', views.VideoDetailView.as_view(), name="video_detail"),
+    
+    path('submit/photo/', views.SubmitPhotoView.as_view(), name="submit_photo"),
+    path('submit/video/', views.SubmitVideoView.as_view(), name="submit_video"),
 
 ]

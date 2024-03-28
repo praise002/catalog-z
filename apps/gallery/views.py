@@ -1,8 +1,11 @@
-from django.shortcuts import render, get_object_or_404
+# from django.forms import inlineformset_factory
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
-# from apps.accounts.mixins import LoginRequiredMixin
+from apps.accounts.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import Photo, Video, Tag, Category
+from .forms import PhotoForm, VideoForm
+import sweetify
 
 class HomeView(View):
     def get(self, request):
@@ -136,3 +139,44 @@ class VideoListByTagView(View):
             "videos": videos
         }
         return render(request, "gallery/videos/video_list.html", context)
+
+class SubmitPhotoView(LoginRequiredMixin, View):
+    def get(self, request):
+        form = PhotoForm()
+        context = {"form": form}
+        return render(request, "gallery/photos/submit_photo.html", context)
+    
+    def post(self, request):
+        form = PhotoForm(request.POST, request.FILES)
+        if form.is_valid():
+            photo = form.save(commit=False)
+            photo.created_by = request.user  
+            photo.save()
+                
+            sweetify.success(request, 
+                             title="Submitted",
+                             message = "Submitted")
+            return redirect("gallery:home")
+        
+        context = {"photo": photo}
+        return render(request, "gallery/photos/submit_photo.html", context)
+    
+class SubmitVideoView(LoginRequiredMixin, View):
+    def get(self, request):
+        form = VideoForm()
+        context = {"form": form}
+        return render(request, "gallery/videos/submit_video.html", context)
+    
+    def post(self, request):
+        form = VideoForm(request.POST, request.FILES)
+        if form.is_valid():
+            video = form.save(commit=False)
+            video.created_by = request.user
+            video.save()
+            sweetify.success(request, 
+                             title="Submitted",
+                             message = "Submitted")
+            return redirect("gallery:home")
+        
+        context = {"form": form}
+        return render(request, "gallery/videos/submit_video.html", context)

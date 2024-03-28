@@ -67,6 +67,9 @@
           <li class="nav-item">
             <a class="nav-link nav-link-4" href="#user">Hi, {{ request.user.first_name }}</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-4" href="{% url "gallery:submit_photo" %}">Submit a photo</a>
+          </li>
           <form action="{% url "accounts:logout" %}" method="post">
             {% csrf_token %}
             <li class="nav-item"><a class="nav-link nav-link-4"><button class="btn btn-primary">Log out</button></a></li>
