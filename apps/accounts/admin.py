@@ -17,6 +17,7 @@ class UserAdmin(BaseUserAdmin):
             {
                 "fields": (
                     "is_email_verified",
+                    "receive_news_and_promotions",
                     "is_active",
                     "is_staff",
                     "is_superuser",

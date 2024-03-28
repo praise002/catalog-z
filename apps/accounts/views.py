@@ -20,6 +20,7 @@ from .forms import (
     CustomSetPasswordForm,
     LoginForm,
     RegistrationForm,
+    UserEditForm
 )
 
 import sweetify
@@ -177,3 +178,24 @@ class LogoutAllDevices(LoginRequiredMixin, View):
         logout(request)
         request.session.flush()  # Clear all session data
         return redirect('gallery:home')  # Redirect to the home page or any other desired page
+
+class EditView(LoginRequiredMixin, View):
+    def get(self, request):
+        form = UserEditForm(instance=request.user)
+        return render(request,
+                    'accounts/edit.html',
+                    {'form': form})
+        
+    def post(self, request):
+        form = UserEditForm(instance=request.user,
+                                 data=request.POST,
+                                 files=request.FILES)
+        if form.is_valid():
+            form.save()
+            sweetify.toast(request, 'Profile updated successfully')
+        else:
+            sweetify.error(request, 'Error updating your profile')
+            
+        return render(request,
+                    'accounts/edit.html',
+                    {'form': form})

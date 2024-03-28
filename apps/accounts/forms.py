@@ -128,3 +128,13 @@ class CustomSetPasswordForm(SetPasswordForm):
             attrs={"autocomplete": "new-password", "class": "form-control"}
         ),
     )
+    
+class UserEditForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = [
+            "first_name", 
+            "last_name", 
+            "photo", 
+            "receive_news_and_promotions"
+            ]

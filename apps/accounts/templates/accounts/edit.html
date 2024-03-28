@@ -8,17 +8,22 @@
       <div class="form-group tm-text-right">
         <button id="js-go-back-btn" type="button" class="btn btn-dark">Go back</button>
       </div>
-      <form action="{% url "gallery:submit_video" %}" method="post" enctype="multipart/form-data" class="tm-contact-form mx-auto">
+      <form action="{% url "accounts:edit" %}" method="post" enctype="multipart/form-data" class="tm-contact-form mx-auto">
         {% csrf_token %}
-        {% for field in form %}
         <div class="form-group">
-          <label class="form-check-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-          {{ field }}
+        {% for field in form %}
+          {% if field.name == 'receive_news_and_promotions' %}
+            {{ field }}
+            <label class="form-check-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {% else %}
+            <label class="form-check-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+          {% endif %}
         </div>
         {% endfor %}
 
         <div class="form-group tm-text-right">
-          <button type="submit" class="btn btn-primary">Send</button>
+          <button type="submit" class="btn btn-primary">Update</button>
         </div>
       </form>                
     </div>

@@ -49,4 +49,6 @@ urlpatterns = [
     path('reset-password/complete/',
          views.CustomPasswordResetCompleteView.as_view(),
          name='password_reset_complete'),
+    
+    path('edit/', views.EditView.as_view(), name="edit"),
 ]
