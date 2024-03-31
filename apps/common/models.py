@@ -10,3 +10,7 @@ class BaseModel(models.Model):
     
     class Meta:
         abstract = True
+        ordering = ["created_at"]
+        indexes = [
+        models.Index(fields=["created_at"]),
+        ]
