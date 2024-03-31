@@ -3,19 +3,14 @@
 {% load static %}
 
 {% block content %}
-<div class="tm-hero d-flex justify-content-center align-items-center" data-parallax="scroll" data-image-src="{% static 'img/hero.jpg' %}">
-  <form class="d-flex tm-search-form" method="get" action="{% url 'gallery:search' %}">
-    <input class="form-control tm-search-input" type="search" name="query" placeholder="Search" aria-label="Search">
-    <button id="js-submit-search" class="btn btn-outline-success tm-search-btn" type="submit">
-      <i class="fas fa-search"></i>
-    </button>
-  </form>
-</div>
-
+{% if query %}
 <div class="container-fluid tm-container-content tm-mt-60">
   <div class="row mb-4">
+    <h1 class="col-6 tm-text-primary">{{ query }}</h1>
+  </div>
+  <div class="row mb-4">
     <h2 class="col-6 tm-text-primary">
-      Explore Categories
+      Categories
     </h2>
   </div>
   <div class="row tm-mb-90 tm-gallery">
@@ -34,34 +29,14 @@
           </div>
         </div>
       </div>
+    {% empty %}
+      <p>There are no results for your query.</p>
     {% endfor %}
-    
-    {% if trending_photos %}
-    <div class="col-12">
-      <h2 class="col-6 tm-text-primary">Trending Photos</h2>
-    </div>
-    {% for photo in trending_photos %}
-      <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-        <div class="card">
-          <figure class="effect-ming tm-video-item">
-            <img src="{{ photo.photo.url }}" alt="{{ photo.title }}" class="card-img-top img-fluid" style="height: 200px; object-fit: cover;">
-            <figcaption class="d-flex align-items-center justify-content-center">
-              <h2>{{ photo.caption }}</h2>
-              <a href="{{ photo.get_absolute_url }}">View more</a>
-            </figcaption>                    
-          </figure>
-          <div class="card-body">
-            <h5 class="card-title">{{ photo.title }}</h5>
-          </div>
-        </div>
-      </div>
-    {% endfor %}
-    {% endif %}
 
     <div class="col-12">
-      <h2 class="col-6 tm-text-primary">Latest Photos</h2>
+      <h2 class="col-6 tm-text-primary">Photos</h2>
     </div>
-    {% for photo in latest_photos %}
+    {% for photo in photos %}
       <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
         <div class="card">
           <figure class="effect-ming tm-video-item">
@@ -76,11 +51,40 @@
           </div>
         </div>
       </div>
+    {% empty %}
+      <p>There are no results for your query.</p>
     {% endfor %}
+
+    <div class="col-12">
+      <h2 class="col-6 tm-text-primary">Videos</h2>
+    </div>
+    {% for video in videos %}
+      <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
+        <div class="card">
+          <figure class="effect-ming tm-video-item">
+            <video autoplay muted loop id="tm-video">
+              <source src="{{ video.video.url }}" type="video/mp4">
+            </video> 
+            <figcaption class="d-flex align-items-center justify-content-center">
+              <h2>{{ video.caption }}</h2>
+              <a href="{{ video.get_absolute_url }}">View more</a>
+            </figcaption>                    
+          </figure>
+          <div class="d-flex justify-content-between tm-text-gray">
+            <span class="tm-text-gray-light">{{ video.created_at|date:"d M Y" }}</span>
+            <span>{{ video.views }} views</span>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+        <p>There are no results for your query.</p>
+      {% endfor %}
+      <p><a href="{% url 'gallery:home' %}">Search again</a></p>
   </div> <!-- row -->
 
 </div> <!-- container-fluid, tm-container-content -->
 
+{% endif %}
 {% endblock %}
 
 {% comment %} TODO: ADD INFINITE SCROLL {% endcomment %}

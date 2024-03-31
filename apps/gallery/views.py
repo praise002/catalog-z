@@ -3,8 +3,10 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from apps.accounts.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib.postgres.search import (SearchVector,
+                            SearchQuery, SearchRank, TrigramSimilarity)
 from .models import Photo, Video, Tag, Category
-from .forms import PhotoForm, VideoForm
+from .forms import PhotoForm, SearchForm, VideoForm
 import sweetify
 
 class HomeView(View):
@@ -180,3 +182,73 @@ class SubmitVideoView(LoginRequiredMixin, View):
         
         context = {"form": form}
         return render(request, "gallery/videos/submit_video.html", context)
+    
+class Search(View):
+    def get(self, request):
+        form = SearchForm()
+        query = None
+        categories = []
+        photos = []
+        
+        if 'query' in request.GET:
+            form = SearchForm(request.GET)
+            if form.is_valid():
+                query = form.cleaned_data["query"]
+                search_query = SearchQuery(query)
+                
+                categories = Category.objects.filter(name__search=search_query)
+                
+                photo_search_vector = SearchVector("title", "description")
+                photos = Photo.objects.annotate(
+                    search=photo_search_vector,
+                    rank=SearchRank(photo_search_vector, search_query)
+                ).filter(search=search_query).order_by("-rank")
+                
+                video_search_vector = SearchVector("title", weight="A") + \
+                                      SearchVector("description", weight="B")
+                videos = Video.objects.annotate(
+                    search=video_search_vector,
+                    rank=SearchRank(video_search_vector, search_query),
+                ).filter(rank__gte=0.3).order_by("-rank")
+            
+        context = {
+            "form": form,
+            "query": query,
+            "categories": categories,
+            "photos": photos,
+            "videos": videos
+        }
+        return render(request, "gallery/search.html", context)
+
+class TrigramSearch(View):
+    def get(self, request):
+        form = SearchForm()
+        query = None
+        categories = []
+        photos = []
+        
+        if 'query' in request.GET:
+            form = SearchForm(request.GET)
+            if form.is_valid():
+                query = form.cleaned_data["query"]
+                
+                categories = Category.objects.annotate(
+                    similarity=TrigramSimilarity("name", query),
+                ).filter(similarity__gte=0.1).order_by("-similarity")
+                
+                photos = Photo.objects.annotate(
+                    similarity=TrigramSimilarity("title", query),
+                ).filter(similarity__gte=0.1).order_by("-similarity")
+                
+                videos = Video.objects.annotate(
+                    similarity=TrigramSimilarity("title", query),
+                ).filter(similarity__gte=0.1).order_by("-similarity")
+            
+        context = {
+            "form": form,
+            "query": query,
+            "categories": categories,
+            "photos": photos,
+            "videos": videos
+        }
+        return render(request, "gallery/search.html", context)

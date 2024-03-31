@@ -18,5 +18,8 @@ urlpatterns = [
     
     path('submit/photo/', views.SubmitPhotoView.as_view(), name="submit_photo"),
     path('submit/video/', views.SubmitVideoView.as_view(), name="submit_video"),
+    
+    # path('search/', views.Search.as_view(), name="search"),
+    path('search/', views.TrigramSearch.as_view(), name="search"),
 
 ]
