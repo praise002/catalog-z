@@ -41,7 +41,8 @@
             </figure>
             <div class="d-flex justify-content-between tm-text-gray">
               <span class="tm-text-gray-light">{{ photo.created_at|date:"d M Y" }}</span>
-              <span>{{ photo.views }} views</span>
+              {% comment %} <span>{{ photo.views }} views</span> {% endcomment %}
+              <span>{{ photo.hit_count.hits }} views</span>
             </div>
           </div>
         </div>

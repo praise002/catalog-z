@@ -5,6 +5,9 @@ from apps.accounts.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.postgres.search import (SearchVector,
                             SearchQuery, SearchRank, TrigramSimilarity)
+from django.contrib.contenttypes.models import ContentType
+from hitcount.models import HitCount
+from hitcount.views import HitCountMixin
 from .models import Photo, Video, Tag, Category
 from .forms import PhotoForm, SearchForm, VideoForm
 import sweetify
@@ -30,6 +33,10 @@ class HomeView(View):
 class CategoryDetailView(View):
     def get(self, request, *args, **kwargs):
         category = get_object_or_404(Category, slug=kwargs["slug"])
+        
+        hit_count = HitCount.objects.get_for_object(category)
+        hit_count_response = HitCountMixin.hit_count(request, hit_count)
+        
         photos = category.photos.all().order_by("-created_at") # retrieve all photos associated with d categ
         context = {
             "category": category,
@@ -63,6 +70,15 @@ class PhotoDetailView(View):
     def get(self, request, *args, **kwargs):
         photo = get_object_or_404(Photo, slug=kwargs["slug"])
         
+        # increment total image views by 1
+        # Method 1: DB
+        photo.views += 1
+        photo.save()
+        
+        # Method 2: using hitcount
+        hit_count = HitCount.objects.get_for_object(photo)
+        hit_count_response = HitCountMixin.hit_count(request, hit_count)
+        
         # Get related photos based on shared tags
         related_photos = Photo.objects.filter(tags__in=photo.tags.all())\
             .exclude(id=photo.id).distinct()
@@ -70,7 +86,7 @@ class PhotoDetailView(View):
             
         context = {
             "photo": photo,
-            "related_photos": related_photos
+            "related_photos": related_photos,
         }
         return render(request, "gallery/photos/photo_detail.html", context)
 

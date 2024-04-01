@@ -48,6 +48,7 @@ THIRD_PARTY_APPS = [
     'crispy_bootstrap5',
     'debug_toolbar',
     'sweetify',
+    'hitcount',
 ]
 
 LOCAL_APPS = [
