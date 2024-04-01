@@ -21,5 +21,7 @@ urlpatterns = [
     
     # path('search/', views.Search.as_view(), name="search"),
     path('search/', views.TrigramSearch.as_view(), name="search"),
+    
+    path('download/photo/<int:photo_id>/', views.download_photo, name="download_photo"),
 
 ]

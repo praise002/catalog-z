@@ -1,8 +1,5 @@
-from typing import Any
 from django.contrib import admin
-from moviepy.editor import VideoFileClip
-from io import BytesIO
-from .models import Photo, Video, Tag, Category
+from .models import Photo, DownloadPhoto, Video, Tag, Category
 
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ("name",)
@@ -11,12 +8,17 @@ class CategoryAdmin(admin.ModelAdmin):
     readonly_fields = ("slug",)
     
 class PhotoAdmin(admin.ModelAdmin):
-    list_display = ("title", "views", "downloads", "created_at", "created_by")
+    list_display = ("title", "views", "created_at", "created_by")
     list_filter = ("created_at", "tags")
     search_fields = ("title",)
     readonly_fields = ("slug", "id")
     date_hierarchy = 'created_at'
     ordering = ("created_at",)
+    
+class DownloadPhotoAdmin(admin.ModelAdmin):
+    list_display = ("photo", "count")
+    list_filter = list_display
+    search_fields = ("photo",)
     
 class VideoAdmin(admin.ModelAdmin):
     list_display = ("title", "downloads", "created_at", "created_by")
@@ -34,3 +36,4 @@ admin.site.register(Category, CategoryAdmin)
 admin.site.register(Photo, PhotoAdmin)
 admin.site.register(Video, VideoAdmin)
 admin.site.register(Tag, TagAdmin)
+admin.site.register(DownloadPhoto, DownloadPhotoAdmin)

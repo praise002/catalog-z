@@ -26,14 +26,20 @@
               Please support us by making <a href="https://paypal.me/templatemo" target="_parent" rel="sponsored">a PayPal donation</a>. Nam ex nibh, efficitur eget libero ut, placerat aliquet justo. Cras nec varius leo.
             </p>
             <div class="text-center mb-5">
-              <a href="{{ photo.photo.url }}" download class="btn btn-primary tm-btn-big">Download</a>
-            </div>                    
+              {% comment %} <a href="{{ photo.photo.url }}" download class="btn btn-primary tm-btn-big">Download</a> {% endcomment %}
+              <a href="{% url 'gallery:download_photo' photo.id %}" download={{ photo.title }} class="btn btn-primary tm-btn-big">Download</a>
+            </div> 
+            {% comment %} TODO: photo.title doesnt work in d download name{% endcomment %}
             <div class="mb-4 d-flex flex-wrap">
               <div class="mr-4 mb-2">
                 <span class="tm-text-gray-dark">Dimension: </span><span class="tm-text-primary">{{ photo.dimension }}</span>
               </div>
               <div class="mr-4 mb-2">
                 <span class="tm-text-gray-dark">Format: </span><span class="tm-text-primary">{{ photo.format|upper }}</span>
+              </div>
+              <div class="mr-4 mb-2">
+                <span class="tm-text-gray-dark">Downloads: </span>
+                <span class="tm-text-primary">{{ photo.downloads.count }}</span>
               </div>
             </div>
             <div class="mb-4">

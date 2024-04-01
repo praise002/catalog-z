@@ -1,16 +1,18 @@
 # from django.forms import inlineformset_factory
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from apps.accounts.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.postgres.search import (SearchVector,
                             SearchQuery, SearchRank, TrigramSimilarity)
-from django.contrib.contenttypes.models import ContentType
+
 from hitcount.models import HitCount
 from hitcount.views import HitCountMixin
-from .models import Photo, Video, Tag, Category
+from .models import Photo, Video, Tag, Category, DownloadPhoto
 from .forms import PhotoForm, SearchForm, VideoForm
 import sweetify
+import requests
 
 class HomeView(View):
     def get(self, request):
@@ -272,3 +274,36 @@ class TrigramSearch(View):
             "videos": videos
         }
         return render(request, "gallery/search.html", context)
+    
+# Source:  https://stackoverflow.com/questions/77149254/get-download-count-via-download-attribute-with-django
+def download_photo(request, photo_id):
+    photo = get_object_or_404(Photo, pk=photo_id)
+    
+    # Increment the download count
+    download, created = DownloadPhoto.objects.get_or_create(photo=photo)
+    print(download)
+    print(created)
+    download.count += 1
+    download.save()
+    
+    # Return the file for download
+    image_url = photo.photo.url
+    print(image_url)
+    response = requests.get(image_url)
+    
+    # Check if the request was successful
+    if response.status_code == 200:
+        # Get the image content and set the appropriate content type
+        image_content = response.content
+        content_type = response.headers["Content-Type"]
+        
+        print(photo.downloads.count)
+        print(photo.downloads)
+        # Return the image content as an HTTP response
+        return HttpResponse(image_content, content_type)
+        
+    else:
+        # Return a generic error response if the image couldn't be fetched
+        return HttpResponse("Failed to download the image.", status=response.status_code)
+    
+    

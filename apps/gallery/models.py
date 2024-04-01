@@ -36,8 +36,7 @@ class Photo(models.Model):
     description = models.TextField(default="Aliquam varius posuere nunc, nec imperdiet neque condimentum at. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Please support us by contributing a small donation via PayPal.")
     photo = models.ImageField(default="fallback.jpg", upload_to="photos/%Y/%m/%d/")  
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="photos", on_delete=models.CASCADE)
-    views = models.PositiveIntegerField(default=0)  
-    downloads = models.PositiveIntegerField(default=0)  
+    views = models.PositiveIntegerField(default=0)   
     dimension = models.CharField(max_length=50)  
     format = models.CharField(_("Format"), max_length=20)  
     license = models.TextField(_("License"), 
@@ -60,6 +59,9 @@ class Photo(models.Model):
     def get_absolute_url(self):
         return reverse("gallery:photo_detail", args=[self.slug])
     
+class DownloadPhoto(models.Model):
+    photo = models.ForeignKey(Photo, related_name="downloads", on_delete=models.CASCADE)
+    count = models.PositiveIntegerField(default=0)
     
 class Video(BaseModel):
     title = models.CharField(_("Title"), max_length=200)
