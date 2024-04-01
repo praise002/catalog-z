@@ -213,6 +213,8 @@ LOGIN_REDIRECT_URL = ''
 LOGIN_URL = 'accounts:login'
 LOGOUT_URL = 'accounts:logout'
 
+HITCOUNT_KEEP_HIT_ACTIVE = { 'days': 1 }
+
 JAZZMIN_SETTINGS = {
     # title of the window (Will default to current_admin_site.site_title if absent or None)
     "site_title": "Catalog Admin",

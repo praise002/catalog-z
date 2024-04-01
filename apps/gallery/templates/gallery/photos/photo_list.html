@@ -1,6 +1,7 @@
 {% extends "common/base.html" %}
 {% block title %}Photos{% endblock %}
 {% load static %}
+{% load hitcount_tags %}
 
 {% block content %}
   <div class="tm-hero d-flex justify-content-center align-items-center" data-parallax="scroll" data-image-src="{% static 'img/hero.jpg' %}">
@@ -42,7 +43,7 @@
             <div class="d-flex justify-content-between tm-text-gray">
               <span class="tm-text-gray-light">{{ photo.created_at|date:"d M Y" }}</span>
               {% comment %} <span>{{ photo.views }} views</span> {% endcomment %}
-              <span>{{ photo.hit_count.hits }} views</span>
+              <span>{% get_hit_count for photo %} views</span>
             </div>
           </div>
         </div>

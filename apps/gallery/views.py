@@ -77,8 +77,11 @@ class PhotoDetailView(View):
         
         # Method 2: using hitcount
         hit_count = HitCount.objects.get_for_object(photo)
-        hit_count_response = HitCountMixin.hit_count(request, hit_count)
+        print(hit_count)
+        print(hit_count.hits)
         
+        hit_count_response = HitCountMixin.hit_count(request, hit_count)
+        print(hit_count_response)
         # Get related photos based on shared tags
         related_photos = Photo.objects.filter(tags__in=photo.tags.all())\
             .exclude(id=photo.id).distinct()
@@ -87,6 +90,7 @@ class PhotoDetailView(View):
         context = {
             "photo": photo,
             "related_photos": related_photos,
+            "hit_count": hit_count
         }
         return render(request, "gallery/photos/photo_detail.html", context)
 

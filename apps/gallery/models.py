@@ -30,7 +30,7 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-class Photo(BaseModel):
+class Photo(models.Model):
     title = models.CharField(_("Title"), max_length=200)
     slug = AutoSlugField(populate_from="title", unique=True, always_update=True)
     description = models.TextField(default="Aliquam varius posuere nunc, nec imperdiet neque condimentum at. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Please support us by contributing a small donation via PayPal.")
@@ -45,6 +45,14 @@ class Photo(BaseModel):
     tags = models.ManyToManyField("Tag", related_name="photos")  
     caption = models.CharField(_("Caption"), max_length=10, default="Untitled")
     category = models.ForeignKey(Category, related_name="photos", on_delete=models.CASCADE, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True) 
+    
+    class Meta:
+        ordering = ["created_at"]
+        indexes = [
+        models.Index(fields=["created_at"]),
+        ]
 
     def __str__(self):
         return self.title
@@ -61,7 +69,7 @@ class Video(BaseModel):
                              storage=VideoMediaCloudinaryStorage(),
                              validators=[validate_video])  
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="videos", on_delete=models.CASCADE)
-    views = models.PositiveIntegerField(default=0)  
+    # views = models.PositiveIntegerField(default=0)  
     downloads = models.PositiveIntegerField(default=0)  
     resolution = models.CharField(max_length=50)  
     format = models.CharField(_("Format"), max_length=20)  
