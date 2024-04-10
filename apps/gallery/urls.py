@@ -23,5 +23,6 @@ urlpatterns = [
     path('search/', views.TrigramSearch.as_view(), name="search"),
     
     path('download/photo/<int:photo_id>/', views.download_photo, name="download_photo"),
+    path('download/video/<uuid:video_id>/', views.download_video, name="download_video"),
 
 ]

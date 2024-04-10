@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Photo, DownloadPhoto, Video, Tag, Category
+from .models import Photo, DownloadPhoto, Video, DownloadVideo, Tag, Category
 
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ("name",)
@@ -27,6 +27,11 @@ class VideoAdmin(admin.ModelAdmin):
     readonly_fields = ("slug",)
     date_hierarchy = 'created_at'
     ordering = ("created_at",)
+    
+class DownloadVideoAdmin(admin.ModelAdmin):
+    list_display = ("video", "count")
+    list_filter = list_display
+    search_fields = ("video",)
 
 class TagAdmin(admin.ModelAdmin):
     list_display = ("name",)
@@ -37,3 +42,4 @@ admin.site.register(Photo, PhotoAdmin)
 admin.site.register(Video, VideoAdmin)
 admin.site.register(Tag, TagAdmin)
 admin.site.register(DownloadPhoto, DownloadPhotoAdmin)
+admin.site.register(DownloadVideo, DownloadVideoAdmin)

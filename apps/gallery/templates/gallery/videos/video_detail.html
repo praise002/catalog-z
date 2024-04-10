@@ -18,7 +18,7 @@
     </div>
     <div class="row tm-mb-90">            
       <div class="col-xl-8 col-lg-7 col-md-6 col-sm-12">
-        <video controls muted loop id="tm-video">
+        <video controls muted loop id="tm-video" controls controlsList="nodownload">
           <source src="{{ video.video.url }}" type="video/mp4">
         </video> 
       </div>
@@ -28,7 +28,8 @@
               Please support us by making <a href="https://paypal.me/templatemo" target="_parent" rel="sponsored">a PayPal donation</a>. Nam ex nibh, efficitur eget libero ut, placerat aliquet justo. Cras nec varius leo.
             </p>
             <div class="text-center mb-5">
-              <a href="{{ video.video.url }}" download class="btn btn-primary tm-btn-big">Download</a>
+              {% comment %} <a href="{{ video.video.url }}" download class="btn btn-primary tm-btn-big">Download</a> {% endcomment %}
+              <a href="{% url 'gallery:download_video' video.id %}" download={{ video.title }} class="btn btn-primary tm-btn-big">Download</a>
             </div>                    
             <div class="mb-4 d-flex flex-wrap">
               <div class="mr-4 mb-2">
@@ -79,5 +80,9 @@
     </div>   
     {% endif %}     
   </div> <!-- row -->
+
+  <script>
+    {% comment %} document.querySelector('video').setAttribute("controlslist", "nodownload"); {% endcomment %}
+  </script>
   
 {% endblock %}

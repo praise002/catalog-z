@@ -9,7 +9,7 @@ from django.contrib.postgres.search import (SearchVector,
 
 from hitcount.models import HitCount
 from hitcount.views import HitCountMixin
-from .models import Photo, Video, Tag, Category, DownloadPhoto
+from .models import Photo, Video, Tag, Category, DownloadPhoto, DownloadVideo
 from .forms import PhotoForm, SearchForm, VideoForm
 import sweetify
 import requests
@@ -276,6 +276,7 @@ class TrigramSearch(View):
         return render(request, "gallery/search.html", context)
     
 # Source:  https://stackoverflow.com/questions/77149254/get-download-count-via-download-attribute-with-django
+# Additional Resource: https://stackoverflow.com/questions/69615012/total-download-count-for-an-item-in-django
 def download_photo(request, photo_id):
     photo = get_object_or_404(Photo, pk=photo_id)
     
@@ -283,13 +284,15 @@ def download_photo(request, photo_id):
     download, created = DownloadPhoto.objects.get_or_create(photo=photo)
     print(download)
     print(created)
-    download.count += 1
+    download.count += 1  #TODO: CHECK OUT F FOR CONCURRENCY
     download.save()
     
     # Return the file for download
     image_url = photo.photo.url
     print(image_url)
     response = requests.get(image_url)
+    print("Response Headers:", response.headers)
+    print(response.headers["Content-Type"])
     
     # Check if the request was successful
     if response.status_code == 200:
@@ -297,13 +300,46 @@ def download_photo(request, photo_id):
         image_content = response.content
         content_type = response.headers["Content-Type"]
         
+        print(download.count)  
         print(photo.downloads.count)
-        print(photo.downloads)
+        
         # Return the image content as an HTTP response
         return HttpResponse(image_content, content_type)
         
     else:
         # Return a generic error response if the image couldn't be fetched
         return HttpResponse("Failed to download the image.", status=response.status_code)
+
+def download_video(request, video_id):
+    video = get_object_or_404(Video, pk=video_id)
     
+    # Increment the download count
+    download, created = DownloadVideo.objects.get_or_create(video=video)
+    print(download)
+    print(created)
+    download.count += 1  #TODO: CHECK OUT F FOR CONCURRENCY
+    download.save()
+    
+    # Return the file for download
+    video_url = video.video.url
+    print(video_url)
+    response = requests.get(video_url)
+    print("Response Headers:", response.headers)
+    print(response.headers["Content-Type"])
+    
+    # Check if the request was successful
+    if response.status_code == 200:
+        # Get the video content and set the appropriate content type
+        video_content = response.content
+        content_type = response.headers["Content-Type"]
+        
+        print(download.count)  
+        print(video.downloads.count)
+        
+        # Return the image content as an HTTP response
+        return HttpResponse(video_content, content_type)
+        
+    else:
+        # Return a generic error response if the image couldn't be fetched
+        return HttpResponse("Failed to download the video.", status=response.status_code)
     

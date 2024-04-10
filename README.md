@@ -43,3 +43,5 @@ python manage.py runserver
 - [Templatemo](https://templatemo.com)
 - [Registration form template](https://mdbootstrap.com/docs/standard/extended/registration/)
 - [Login template incomplete](https://mdbootstrap.com/docs/standard/extended/login/)
+- [remove download solution 1](https://www.quora.com/How-do-I-disable-the-download-button-from-the-controls-in-HTML5-video-for-Google-Chrome)
+- [remove download solution 2](https://stackoverflow.com/questions/60469776/how-to-remove-the-download-button-from-video-element#:~:text=Just%20use%20the%20setAttribute%20method,the%20download%20option%20for%20you.&text=That%20button%20is%20not%20provided,browser%20that's%20viewing%20the%20content.)

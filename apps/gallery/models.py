@@ -58,10 +58,15 @@ class Photo(models.Model):
     
     def get_absolute_url(self):
         return reverse("gallery:photo_detail", args=[self.slug])
-    
+
+# TODO: Can get format, file size, dimensions via cloudinary API
+
 class DownloadPhoto(models.Model):
-    photo = models.ForeignKey(Photo, related_name="downloads", on_delete=models.CASCADE)
+    photo = models.OneToOneField(Photo, related_name="downloads", on_delete=models.CASCADE)
     count = models.PositiveIntegerField(default=0)
+    
+    def __str__(self):
+        return self.photo.title
     
 class Video(BaseModel):
     title = models.CharField(_("Title"), max_length=200)
@@ -71,8 +76,7 @@ class Video(BaseModel):
                              storage=VideoMediaCloudinaryStorage(),
                              validators=[validate_video])  
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="videos", on_delete=models.CASCADE)
-    # views = models.PositiveIntegerField(default=0)  
-    downloads = models.PositiveIntegerField(default=0)  
+    # views = models.PositiveIntegerField(default=0)   
     resolution = models.CharField(max_length=50)  
     format = models.CharField(_("Format"), max_length=20)  
     duration = models.CharField(default="00:00:20")
@@ -88,6 +92,13 @@ class Video(BaseModel):
     
     def get_absolute_url(self):
         return reverse("gallery:video_detail", args=[self.slug])
+    
+class DownloadVideo(models.Model):
+    video = models.OneToOneField(Video, related_name="downloads", on_delete=models.CASCADE)
+    count = models.PositiveIntegerField(default=0)
+    
+    def __str__(self):
+        return self.video.title
 
 class Tag(models.Model):  #TODO: Might split to a different app
     name = models.CharField(_("Name"), max_length=50)
