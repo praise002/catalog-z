@@ -11,22 +11,14 @@ class Category(models.Model):
     
     name = models.CharField(_("Name"), max_length=50)
     slug = AutoSlugField(populate_from="name", unique=True, always_update=True)
-    image = models.ImageField(upload_to="category/%Y/%m/%d/", null=True, blank=True)
+    image = models.ImageField(upload_to="category/%Y/%m/%d/")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True) 
     
-    # https://res.cloudinary.com/dq0ow9lxw/image/upload/v1712837648/fallback_kw4pjb.jpg
-    # TODO: FIX ISSUE WITH DEFAULT IMAGE NOT WORKING
     @property
     def image_url(self):
         return self.image.url
-        # if self.image:
-        #     return self.image.url
-        # else:
-        #     # Default image URL
-        #     return "https://res.cloudinary.com/dq0ow9lxw/image/upload/v1712837648/fallback_kw4pjb.jpg"
 
-    
     class Meta:
         verbose_name_plural = "Categories"
 
@@ -37,7 +29,7 @@ class Photo(models.Model):
     title = models.CharField(_("Title"), max_length=200)
     slug = AutoSlugField(populate_from="title", unique=True, always_update=True)
     description = models.TextField(default="Aliquam varius posuere nunc, nec imperdiet neque condimentum at. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Please support us by contributing a small donation via PayPal.")
-    photo = models.ImageField(default="fallback.jpg", upload_to="photos/%Y/%m/%d/")  
+    photo = models.ImageField(upload_to="photos/%Y/%m/%d/")  
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="photos", on_delete=models.CASCADE)
     views = models.PositiveIntegerField(default=0)   
     dimension = models.CharField(max_length=50)  

@@ -25,13 +25,10 @@ class HomeView(View):
         # Display latest photos
         latest_photos = Photo.objects.all().order_by("-created_at")
         
-        DEFAULT_IMAGE_URL = "https://res.cloudinary.com/dq0ow9lxw/image/upload/v1712837648/fallback_kw4pjb.jpg"
-        
         context = {
             "categories": categories,
             "trending_photos": trending_photos,
             "latest_photos": latest_photos,
-            "default_image_url": DEFAULT_IMAGE_URL,
         }
         return render(request, 'gallery/home.html', context)
 
