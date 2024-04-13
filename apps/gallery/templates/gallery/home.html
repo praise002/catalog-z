@@ -23,7 +23,11 @@
       <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
         <div class="card">
           <figure class="effect-ming tm-video-item">
+            {% if category.image %}
             <img src="{{ category.image_url }}" alt="{{ category.name }}" class="card-img-top img-fluid" style="height: 200px; object-fit: cover;">
+            {% else %}
+            <img src="{{ default_image_url }}" alt="Default Image" class="card-img-top img-fluid" style="height: 200px; object-fit: cover;">
+            {% endif %}
             <figcaption class="d-flex align-items-center justify-content-center">
               <h2>{{ category.name }}</h2>
               <a href="{% url "gallery:category_detail" slug=category.slug %}">View more</a>

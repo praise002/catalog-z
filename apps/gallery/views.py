@@ -25,16 +25,21 @@ class HomeView(View):
         # Display latest photos
         latest_photos = Photo.objects.all().order_by("-created_at")
         
+        DEFAULT_IMAGE_URL = "https://res.cloudinary.com/dq0ow9lxw/image/upload/v1712837648/fallback_kw4pjb.jpg"
+        
         context = {
             "categories": categories,
             "trending_photos": trending_photos,
             "latest_photos": latest_photos,
+            "default_image_url": DEFAULT_IMAGE_URL,
         }
         return render(request, 'gallery/home.html', context)
 
 class CategoryDetailView(View):
     def get(self, request, *args, **kwargs):
         category = get_object_or_404(Category, slug=kwargs["slug"])
+        print(category.image_url)
+        print(category.image.url)
         
         hit_count = HitCount.objects.get_for_object(category)
         hit_count_response = HitCountMixin.hit_count(request, hit_count)

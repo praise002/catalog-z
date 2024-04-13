@@ -8,20 +8,23 @@ from cloudinary_storage.validators import validate_video
 from apps.common.models import BaseModel
 
 class Category(models.Model):
+    
     name = models.CharField(_("Name"), max_length=50)
     slug = AutoSlugField(populate_from="name", unique=True, always_update=True)
-    image = models.ImageField(default="fallback.jpg", upload_to="category/%Y/%m/%d/")
+    image = models.ImageField(upload_to="category/%Y/%m/%d/", null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True) 
     
+    # https://res.cloudinary.com/dq0ow9lxw/image/upload/v1712837648/fallback_kw4pjb.jpg
     # TODO: FIX ISSUE WITH DEFAULT IMAGE NOT WORKING
     @property
     def image_url(self):
-        try:
-            url = self.image.url
-        except:
-            url = "/static/media/fallback.jpg"
-        return url  # TODO: NOT WORKING
+        return self.image.url
+        # if self.image:
+        #     return self.image.url
+        # else:
+        #     # Default image URL
+        #     return "https://res.cloudinary.com/dq0ow9lxw/image/upload/v1712837648/fallback_kw4pjb.jpg"
 
     
     class Meta:
@@ -59,7 +62,6 @@ class Photo(models.Model):
     def get_absolute_url(self):
         return reverse("gallery:photo_detail", args=[self.slug])
 
-# TODO: Can get format, file size, dimensions via cloudinary API
 
 class DownloadPhoto(models.Model):
     photo = models.OneToOneField(Photo, related_name="downloads", on_delete=models.CASCADE)
