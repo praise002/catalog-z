@@ -158,13 +158,10 @@ class CustomPasswordResetConfirmView(LogoutRequiredMixin, PasswordResetConfirmVi
     template_name = "accounts/password_reset_confirm.html"
 
 class CustomPasswordResetDoneView(LogoutRequiredMixin, PasswordResetDoneView):
-    # This is unnecessary as it can be done in the urls. Its just so that I can pass in Logout Required Mixin Easily
     template_name = "accounts/password_reset_done.html"
 
 
 class CustomPasswordResetCompleteView(LogoutRequiredMixin, PasswordResetCompleteView):
-    # This is unnecessary as it can be done in the urls. Its just so that I can pass in Logout Required Mixin Easily
-    # Taken from django.contrib.auth.views
     template_name = "accounts/password_reset_complete.html"
     
 class LogoutView(LoginRequiredMixin, View):
