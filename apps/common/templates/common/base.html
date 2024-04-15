@@ -26,6 +26,40 @@
     .icon {
       color: #009999; /* Change the color to blue */
     }
+
+    .profile-pic-container {
+      display: flex;
+      flex-direction: column;
+      align-items: end;
+      position: relative;
+      width: 500px;
+    }
+    .profile-pic {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .profile-pic img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* Ensure the image covers the entire area of the circular container */
+    }
+    .profile-details {
+      position: absolute;
+      top: 100%;
+      
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 10px;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      display: none;
+    }
+    .profile-pic-container.active .profile-details {
+      display: block;
+    }
   </style>
   <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
   <link rel="stylesheet" href="{% static 'fontawesome/css/all.min.css' %}">
@@ -66,15 +100,26 @@
         </li>
         {% if request.user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link nav-link-4" href="#user">Hi, {{ request.user.first_name }}</a>
+            <div class="profile-pic-container" onclick="toggleProfileDetails(this)"> <!--fix-->
+              <div class="profile-pic">
+                <img src="{{ request.user.photo.url }}" alt="Profile Picture">
+              </div>
+              <!-- User information -->
+              <div class="profile-details">
+                <p><a href="{% url 'accounts:edit' %}" class="text-decoration-none text-dark">Edit profile</a></p>
+                <p><a href="#settings" class="text-decoration-none text-dark">Account Settings</a></p>
+                <p><a class="text-decoration-none text-dark" href="{% url "gallery:submit_photo" %}">Submit a Photo</a></p>
+                <form action="{% url "accounts:logout" %}" method="post">
+                  {% csrf_token %}
+                  <a><button class="btn btn-danger mb-1">Logout</button></a>
+                </form>
+                <form action="{% url "accounts:logout_all_devices" %}" method="post">
+                  {% csrf_token %}
+                  <a><button class="btn btn-secondary mb-1">Log off all devices</button></a>
+                </form>
+              </div>
+            </div>
           </li>
-          <li class="nav-item">
-            <a class="nav-link nav-link-4" href="{% url "gallery:submit_photo" %}">Submit a photo</a>
-          </li>
-          <form action="{% url "accounts:logout" %}" method="post">
-            {% csrf_token %}
-            <li class="nav-item"><a class="nav-link nav-link-4"><button class="btn btn-primary">Log out</button></a></li>
-          </form>
         {% else %}
           <li class="nav-item">
               <a class="nav-link nav-link-4" href="{% url "accounts:login" %}">Log in</a>
@@ -131,10 +176,18 @@
   
   <script src="{% static 'js/plugins.js' %}"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.6.5/sweetalert2.all.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  
   <script>
-      $(window).on("load", function() {
-          $('body').addClass('loaded');
-      });
+    $(window).on("load", function() {
+        $('body').addClass('loaded');
+    });
+
+    function toggleProfileDetails(element) {
+      element.classList.toggle('active');
+    }
   </script>
 </body>
 </html>

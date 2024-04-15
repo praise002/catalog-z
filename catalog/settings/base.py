@@ -29,8 +29,7 @@ SITE_ID = 1
 # Application definition
 
 DJANGO_APPS = [
-    # 'jazzmin',
-    # 'apps.accounts.apps.AccountsConfig',
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -226,10 +225,10 @@ JAZZMIN_SETTINGS = {
     "site_brand": "Catalog",
 
     # Logo to use for your site, must be present in static files, used for brand on top left
-    "site_logo": "media/catalog.png",
+    "site_logo": "img/catalog.png",
 
     # Logo to use for your site, must be present in static files, used for login form logo (defaults to site_logo)
-    "login_logo": "media/catalog.png", 
+    "login_logo": "img/catalog.png", 
 
     # CSS classes that are applied to the logo above
     "site_logo_classes": "img-circle",  
@@ -243,6 +242,9 @@ JAZZMIN_SETTINGS = {
     # List of model admins to search from the search bar, search bar omitted if excluded
     # If you want to use a single search field you dont need to use a list, you can use a simple string 
     "search_model": "accounts.User", 
+    
+    # Field name on user model that contains avatar ImageField/URLField/Charfield or a callable that receives the user
+    "user_avatar": "photo",
 
     ############
     # Top Menu #
@@ -260,6 +262,7 @@ JAZZMIN_SETTINGS = {
         # App with dropdown menu to all its models pages (Permissions checked against models)
         {"app": "accounts"},   
         {"app": "gallery"},  
+        {"app": "general"},
     ],
 
     #############
@@ -268,7 +271,7 @@ JAZZMIN_SETTINGS = {
 
     # Additional links to include in the user menu on the top right ("app" url type is not allowed)
     "usermenu_links": [
-        {"name": "Catalog Frontpage", "url": "/", "new_window": True},  #TODO: Not working
+        {"name": "Catalog Frontpage", "url": "/", "new_window": True},  
         {"model": "accounts.user"}  
     ],
 
@@ -294,7 +297,17 @@ JAZZMIN_SETTINGS = {
         "accounts.user": "fas fa-users-cog",
         "auth.Group": "fas fa-users",
         "sites.site": "fas fa-globe",
-    },  #TODO: Add more later as the app grows fas fa-film
+        "gallery.category": "fas fa-cubes",
+        "gallery.photo": "fas fa-camera",
+        "gallery.video": "fas fa-video",
+        "gallery.tag": "fas fa-tags",
+        "gallery.downloadphoto": "fas fa-download",
+        "gallery.downloadvideo": "fas fa-download",
+        "general.address": "fas fa-map-marker-alt",
+        "general.contact": "fas fa-envelope",
+        "general.employee": "fas fa-users",
+        "general.sitedetail": "fas fa-info",
+    },  
     # Icons that are used when one is not manually specified
     "default_icon_parents": "fas fa-chevron-circle-right",
     "default_icon_children": "fas fa-circle",

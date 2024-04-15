@@ -3,6 +3,19 @@
 {% load static %}
 
 {% block content %}
+<style>
+  .scroll-container {
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+  }
+  .scroll-content {
+    display: inline-block;
+    width: 300px; 
+    height: auto;
+  }
+  /* Improve the style later */
+</style>
 <div class="tm-hero d-flex justify-content-center align-items-center" data-parallax="scroll" data-image-src="{% static 'img/hero.jpg' %}">
   <form class="d-flex tm-search-form" method="get" action="{% url 'gallery:search' %}">
     <input class="form-control tm-search-input" type="search" name="query" placeholder="Search" aria-label="Search">
@@ -12,26 +25,22 @@
   </form>
 </div>
 
-<div class="container-fluid tm-container-content tm-mt-60">
+<div class="tm-container-content tm-mt-60">
   <div class="row mb-4">
     <h2 class="col-6 tm-text-primary">
       Explore Categories
     </h2>
   </div>
-  <div class="row tm-mb-90 tm-gallery">
+  <div class="scroll-container">
     {% for category in categories %}
-      <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
+      <div class="scroll-content mb-1">
         <div class="card">
           <figure class="effect-ming tm-video-item">
-            {% if category.image %}
             <img src="{{ category.image_url }}" alt="{{ category.name }}" class="card-img-top img-fluid" style="height: 200px; object-fit: cover;">
-            {% else %}
-            <img src="{{ default_image_url }}" alt="Default Image" class="card-img-top img-fluid" style="height: 200px; object-fit: cover;">
-            {% endif %}
             <figcaption class="d-flex align-items-center justify-content-center">
               <h2>{{ category.name }}</h2>
               <a href="{% url "gallery:category_detail" slug=category.slug %}">View more</a>
-            </figcaption>                    
+            </figcaption>
           </figure>
           <div class="card-body">
             <h5 class="card-title">{{ category.name }}</h5>
@@ -39,52 +48,55 @@
         </div>
       </div>
     {% endfor %}
+  </div> <!-- scroll-container -->
+
     
-    {% if trending_photos %}
-    <div class="col-12">
-      <h2 class="col-6 tm-text-primary">Trending Photos</h2>
-    </div>
-    {% for photo in trending_photos %}
-      <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-        <div class="card">
-          <figure class="effect-ming tm-video-item">
-            <img src="{{ photo.photo.url }}" alt="{{ photo.title }}" class="card-img-top img-fluid" style="height: 200px; object-fit: cover;">
-            <figcaption class="d-flex align-items-center justify-content-center">
-              <h2>{{ photo.caption }}</h2>
-              <a href="{{ photo.get_absolute_url }}">View more</a>
-            </figcaption>                    
-          </figure>
-          <div class="card-body">
-            <h5 class="card-title">{{ photo.title }}</h5>
-          </div>
+  {% if trending_photos %}
+  <div class="scroll-container">
+  <div class="col-12">
+    <h2 class="col-6 tm-text-primary">Trending Photos</h2>
+  </div>
+  {% for photo in trending_photos %}
+    <div class="scroll-content mb-1">
+      <div class="card">
+        <figure class="effect-ming tm-video-item">
+          <img src="{{ photo.photo.url }}" alt="{{ photo.title }}" class="card-img-top img-fluid" style="height: 200px; object-fit: cover;">
+          <figcaption class="d-flex align-items-center justify-content-center">
+            <h2>{{ photo.caption }}</h2>
+            <a href="{{ photo.get_absolute_url }}">View more</a>
+          </figcaption>
+        </figure>
+        <div class="card-body">
+          <h5 class="card-title">{{ photo.title }}</h5>
         </div>
       </div>
-    {% endfor %}
-    {% endif %}
+    </div>
+  {% endfor %}
+  </div>
+  {% endif %}
+    
 
     <div class="col-12">
-      <h2 class="col-6 tm-text-primary">Latest Photos</h2>
+      <h2 class="col-6 tm-text-primary mt-5">Latest Photos</h2>
     </div>
-    {% for photo in latest_photos %}
-      <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
-        <div class="card">
-          <figure class="effect-ming tm-video-item">
-            <img src="{{ photo.photo.url }}" alt="{{ photo.title }}" class="card-img-top img-fluid" style="height: 200px; object-fit: cover;">
-            <figcaption class="d-flex align-items-center justify-content-center">
-              <h2>{{ photo.caption }}</h2>
-              <a href="{% url "gallery:photo_detail" slug=photo.slug %}">View more</a>
-            </figcaption>                    
-          </figure>
-          <div class="card-body">
-            <h5 class="card-title">{{ photo.title }}</h5>
+    <div class="scroll-container">
+      {% for photo in latest_photos %}
+        <div class="scroll-content mb-1">
+          <div class="card">
+            <figure class="effect-ming tm-video-item">
+              <img src="{{ photo.photo.url }}" alt="{{ photo.title }}" class="card-img-top img-fluid" style="height: 200px; object-fit: cover;">
+              <figcaption class="d-flex align-items-center justify-content-center">
+                <h2>{{ photo.caption }}</h2>
+                <a href="{% url "gallery:photo_detail" slug=photo.slug %}">View more</a>
+              </figcaption>
+            </figure>
+            <div class="card-body">
+              <h5 class="card-title">{{ photo.title }}</h5>
+            </div>
           </div>
         </div>
-      </div>
-    {% endfor %}
-  </div> <!-- row -->
-
-</div> <!-- container-fluid, tm-container-content -->
+      {% endfor %}
+    </div>
+</div> <!-- tm-container-content -->
 
 {% endblock %}
-
-{% comment %} TODO: ADD INFINITE SCROLL {% endcomment %}
