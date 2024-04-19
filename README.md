@@ -15,6 +15,12 @@ Catalog-Z is a free stock image and video website built with Django, Bootstrap, 
 - **Cloudinary**: Integration for storing and serving images and videos.
 - **PostgreSQL**: Database management system used by Django for storing data.
 
+![Admin Login](media/admin-login.png)
+
+![Admin Dashboard](media/admin-dashboard-1.png)
+
+![Admin Dashboard](media/admin-dashboard-2.png)
+
 ## Getting Started
 To run this project locally, follow these steps:
 1. Clone the repository:
