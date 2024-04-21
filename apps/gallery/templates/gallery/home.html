@@ -4,16 +4,81 @@
 
 {% block content %}
 <style>
-  .scroll-container {
-    overflow-x: scroll;
+  {% comment %} .scroll-container {
+    overflow-x: hidden;
     overflow-y: hidden;
     white-space: nowrap;
+    position: relative;
+  } {% endcomment %}
+  .scroll-container {
+    position: relative;
+    padding: 0px 30px;
+    margin-top: 5px;
   }
-  .scroll-content {
+  .scroll-images {
+    position: relative;
+    width: 100%;
+    padding: 40px 0px;
+    height: auto;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+  .scroll-images::-webkit-scrollbar {
+    width: 5px;
+    height: 8px;
+    background-color: #aaa;
+  }
+  .scroll-images::-webkit-scrollbar-thumb {
+    background-color: black;
+  }
+  {% comment %} .scroll-image {
     display: inline-block;
     width: 300px; 
     height: auto;
+  } {% endcomment %}
+  .scroll-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 300px;
+    height: 200px;
+    padding: 0px 15px;
+    margin: 1px 10px;
+    border: 1px solid #f1f1f1;
+    overflow: hidden;
+    -webkit-box-shadow: 0px 0px 15px 2px rgb(0 0 0 / 10%);;
+    box-shadow: 0px 0px 15px 2px rgb(0 0 0 / 10%);;
   }
+  button {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 25px;
+  }
+  
+  /* Style the scroll buttons */
+  .scroll-left-btn,
+  .scroll-right-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+
+  /* Position the buttons */
+  .scroll-left-btn {
+    left: 0;
+  }
+
+  .scroll-right-btn {
+    right: 0;
+  }
+  
   /* Improve the style later */
 </style>
 <div class="tm-hero d-flex justify-content-center align-items-center" data-parallax="scroll" data-image-src="{% static 'img/hero.jpg' %}">
@@ -25,40 +90,46 @@
   </form>
 </div>
 
-<div class="tm-container-content tm-mt-60">
+<div class="tm-container-content tm-mt-60 pl-3">
   <div class="row mb-4">
     <h2 class="col-6 tm-text-primary">
       Explore Categories
     </h2>
   </div>
   <div class="scroll-container">
+    <div class="scroll-images mb-1">
     {% for category in categories %}
-      <div class="scroll-content mb-1">
-        <div class="card">
-          <figure class="effect-ming tm-video-item">
-            <img src="{{ category.image_url }}" alt="{{ category.name }}" class="card-img-top img-fluid" style="height: 200px; object-fit: cover;">
-            <figcaption class="d-flex align-items-center justify-content-center">
-              <h2>{{ category.name }}</h2>
-              <a href="{% url "gallery:category_detail" slug=category.slug %}">View more</a>
-            </figcaption>
-          </figure>
-          <div class="card-body">
-            <h5 class="card-title">{{ category.name }}</h5>
-          </div>
+      <div class="scroll-image card">
+        <figure class="effect-ming tm-video-item">
+          <img src="{{ category.image_url }}" alt="{{ category.name }}" class="card-img-top img-fluid" style="height: 200px; object-fit: cover;">
+          <figcaption class="d-flex align-items-center justify-content-center">
+            <h2>{{ category.name }}</h2>
+            <a href="{% url "gallery:category_detail" slug=category.slug %}">View more</a>
+          </figcaption>
+        </figure>
+        <div class="card-body">
+          <h5 class="card-title">{{ category.name }}</h5>
         </div>
       </div>
     {% endfor %}
+    </div>
+    <button class="scroll-left-btn">
+      <i class="fas fa-angle-double-left"></i>
+    </button>
+    <button class="scroll-right-btn">
+      <i class="fas fa-angle-double-right"></i>
+    </button>
   </div> <!-- scroll-container -->
 
     
   {% if trending_photos %}
   <div class="scroll-container">
-  <div class="col-12">
-    <h2 class="col-6 tm-text-primary">Trending Photos</h2>
-  </div>
-  {% for photo in trending_photos %}
-    <div class="scroll-content mb-1">
-      <div class="card">
+    <div class="col-12">
+      <h2 class="col-6 tm-text-primary">Trending Photos</h2>
+    </div>
+    <div class="scroll-images mb-1">
+    {% for photo in trending_photos %}
+      <div class="scroll-image card">
         <figure class="effect-ming tm-video-item">
           <img src="{{ photo.photo.url }}" alt="{{ photo.title }}" class="card-img-top img-fluid" style="height: 200px; object-fit: cover;">
           <figcaption class="d-flex align-items-center justify-content-center">
@@ -70,33 +141,108 @@
           <h5 class="card-title">{{ photo.title }}</h5>
         </div>
       </div>
+    {% endfor %}
     </div>
-  {% endfor %}
+    <button class="scroll-left-btn">
+      <i class="fas fa-angle-double-left"></i>
+    </button>
+    <button class="scroll-right-btn">
+      <i class="fas fa-angle-double-right"></i>
+    </button>
   </div>
   {% endif %}
     
 
-    <div class="col-12">
-      <h2 class="col-6 tm-text-primary mt-5">Latest Photos</h2>
-    </div>
-    <div class="scroll-container">
-      {% for photo in latest_photos %}
-        <div class="scroll-content mb-1">
-          <div class="card">
-            <figure class="effect-ming tm-video-item">
-              <img src="{{ photo.photo.url }}" alt="{{ photo.title }}" class="card-img-top img-fluid" style="height: 200px; object-fit: cover;">
-              <figcaption class="d-flex align-items-center justify-content-center">
-                <h2>{{ photo.caption }}</h2>
-                <a href="{% url "gallery:photo_detail" slug=photo.slug %}">View more</a>
-              </figcaption>
-            </figure>
-            <div class="card-body">
-              <h5 class="card-title">{{ photo.title }}</h5>
-            </div>
-          </div>
+  <div class="col-12">
+    <h2 class="col-6 tm-text-primary mt-5">Latest Photos</h2>
+  </div>
+  <div class="scroll-container">
+    <div class="scroll-images mb-1">
+    {% for photo in latest_photos %}
+      <div class="scroll-image card">
+        <figure class="effect-ming tm-video-item">
+          <img src="{{ photo.photo.url }}" alt="{{ photo.title }}" class="card-img-top img-fluid" style="height: 200px; object-fit: cover;">
+          <figcaption class="d-flex align-items-center justify-content-center">
+            <h2>{{ photo.caption }}</h2>
+            <a href="{% url "gallery:photo_detail" slug=photo.slug %}">View more</a>
+          </figcaption>
+        </figure>
+        <div class="card-body">
+          <h5 class="card-title">{{ photo.title }}</h5>
         </div>
-      {% endfor %}
+      </div>
+    {% endfor %}
     </div>
+    <button class="scroll-left-btn">
+      <i class="fas fa-angle-double-left"></i>
+    </button>
+    <button class="scroll-right-btn">
+      <i class="fas fa-angle-double-right"></i>
+    </button>
+  </div>
 </div> <!-- tm-container-content -->
 
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const scrollImages = document.querySelectorAll('.scroll-images');
+    const scrollLengths = Array.from(scrollImages).map(scrollImage => scrollImage.scrollWidth - scrollImage.clientWidth);
+    const leftBtns = document.querySelectorAll('.scroll-left-btn');
+    const rightBtns = document.querySelectorAll('.scroll-right-btn');
+  
+    function checkScroll() {
+      scrollImages.forEach((scrollImage, index) => {
+        const currentScroll = scrollImage.scrollLeft;
+        const scrollLength = scrollLengths[index];
+        console.log("current scroll", currentScroll); // TODO: FIX
+        console.log("scroll length", scrollLength);
+        const leftBtn = leftBtns[index];
+        const rightBtn = rightBtns[index];
+  
+        if (currentScroll === 0) {
+          leftBtn.setAttribute("disabled", "true");
+          rightBtn.removeAttribute("disabled");
+        } else if (currentScroll === scrollLength) {
+          
+          rightBtn.setAttribute("disabled", "true");
+          leftBtn.removeAttribute("disabled");
+        } else {
+          leftBtn.removeAttribute("disabled");
+          rightBtn.removeAttribute("disabled");
+        }
+      });
+    }
+  
+    scrollImages.forEach(scrollImage => {
+      scrollImage.addEventListener("scroll", checkScroll);
+    });
+    window.addEventListener("resize", checkScroll);
+    checkScroll();
+  
+    function leftScroll(scrollImage) {
+      scrollImage.scrollBy({
+        left: -200,
+        behavior: 'smooth'
+      });
+    }
+  
+    function rightScroll(scrollImage) {
+      scrollImage.scrollBy({
+        left: 200, 
+        behavior: 'smooth'
+      });
+    }
+  
+    leftBtns.forEach((leftBtn, index) => {
+      leftBtn.addEventListener('click', () => {
+        leftScroll(scrollImages[index]);
+      });
+    });
+  
+    rightBtns.forEach((rightBtn, index) => {
+      rightBtn.addEventListener('click', () => {
+        rightScroll(scrollImages[index]);
+      });
+    });
+  });  
+</script>
 {% endblock %}

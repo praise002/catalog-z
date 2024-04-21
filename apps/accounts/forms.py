@@ -130,6 +130,10 @@ class CustomSetPasswordForm(SetPasswordForm):
     )
     
 class UserEditForm(forms.ModelForm):
+    receive_news_and_promotions = forms.BooleanField(
+        widget=forms.CheckboxInput(attrs={"class": "form-check-input me-2",
+                                          }), 
+    )
     class Meta:
         model = User
         fields = [

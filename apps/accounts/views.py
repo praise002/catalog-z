@@ -171,7 +171,7 @@ class LogoutView(LoginRequiredMixin, View):
         # return redirect('gallery:home')
 
 class LogoutAllDevices(LoginRequiredMixin, View):
-    def get(self, request):
+    def post(self, request):
         logout(request)
         request.session.flush()  # Clear all session data
         return redirect('gallery:home')  # Redirect to the home page or any other desired page
