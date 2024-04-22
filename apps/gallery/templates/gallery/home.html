@@ -188,21 +188,18 @@
     const scrollLengths = Array.from(scrollImages).map(scrollImage => scrollImage.scrollWidth - scrollImage.clientWidth);
     const leftBtns = document.querySelectorAll('.scroll-left-btn');
     const rightBtns = document.querySelectorAll('.scroll-right-btn');
-  
+    
     function checkScroll() {
       scrollImages.forEach((scrollImage, index) => {
         const currentScroll = scrollImage.scrollLeft;
         const scrollLength = scrollLengths[index];
-        console.log("current scroll", currentScroll); // TODO: FIX
-        console.log("scroll length", scrollLength);
         const leftBtn = leftBtns[index];
         const rightBtn = rightBtns[index];
   
         if (currentScroll === 0) {
           leftBtn.setAttribute("disabled", "true");
           rightBtn.removeAttribute("disabled");
-        } else if (currentScroll === scrollLength) {
-          
+        } else if (Math.round(currentScroll) === scrollLength) {
           rightBtn.setAttribute("disabled", "true");
           leftBtn.removeAttribute("disabled");
         } else {
