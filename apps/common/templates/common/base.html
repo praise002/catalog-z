@@ -26,7 +26,6 @@
     .icon {
       color: #009999; /* Change the color to blue */
     }
-    
   </style>
   <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
   <link rel="stylesheet" href="{% static 'fontawesome/css/all.min.css' %}">
@@ -66,29 +65,17 @@
               <a class="nav-link nav-link-4" href="{% url "general:contact" %}">Contact</a>
           </li>
           {% if request.user.is_authenticated %}
-            <li class="nav-item dropdown">
-              <a class="navbar-brand nav-link dropdown-toggle" role="button" href="#" data-bs-toggle="dropdown">
-                <img src="{{ request.user.photo.url }}" alt="Profile Picture" style="width:20px;" class="rounded-circle"> 
-              </a>
-              {% comment %} TODO: FIX {% endcomment %}
-              <ul class="dropdown-menu">
-                <li><a href="{% url 'accounts:edit' %}" class="dropdown-item text-decoration-none text-dark">Edit profile</a></li>
-                <li><a href="{% url 'accounts:password_change' %}" class="dropdown-item text-decoration-none text-dark">Change Password</a></li>
-                <li><a href="#settings" class="dropdown-item text-decoration-none text-dark">Account Settings</a></li>
-                <li><a class="dropdown-item text-decoration-none text-dark" href="{% url "gallery:submit_photo" %}">Submit a Photo</a></li>
-                <li>
-                  <form action="{% url "accounts:logout" %}" method="post">
-                    {% csrf_token %}
-                    <button class="dropdown-item btn btn-danger mb-1">Logout</button>
-                  </form>
-                </li>
-                <li>
-                  <form action="{% url "accounts:logout_all_devices" %}" method="post">
-                    {% csrf_token %}
-                    <button class="dropdown-item btn btn-secondary mb-1">Log off all devices</button>
-                  </form>
-                </li>
-              </ul>
+            <li class="nav-item">
+              <a class="nav-link nav-link-4" href="{% url 'accounts:edit' %}" class="text-decoration-none text-dark">Edit profile</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link nav-link-4" href="{% url 'accounts:password_change' %}" class="text-decoration-none text-dark">Change Password</a>
+            </li>
+            <li class="nav-item">
+              <form action="{% url "accounts:logout" %}" method="post">
+                {% csrf_token %}
+                  <button class="btn mb-1 nav-link nav-link-4">Logout</button>
+              </form>
             </li>
           {% else %}
             <li class="nav-item">
@@ -102,6 +89,7 @@
       </div> <!-- Close div here -->
     </div>
   </nav>
+  
 
   {% block content %}
   {% endblock %}
@@ -143,6 +131,7 @@
       </div>
     </div>
   </footer>
+
   
   
   <script src="{% static 'js/plugins.js' %}"></script>
