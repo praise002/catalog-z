@@ -142,3 +142,9 @@ class UserEditForm(forms.ModelForm):
             "photo", 
             "receive_news_and_promotions"
             ]
+
+# TODO:Create a live postgres db
+# what to do with translations on production
+# Remember to run the makemessages management command to generate 
+# language files, and 
+# then use compilemessages to compile them after translations are added.

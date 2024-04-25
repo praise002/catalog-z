@@ -35,6 +35,7 @@ DJANGO_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    "whitenoise.runserver_nostatic",  # to enable whitenoise handle static files in development
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.postgres',
@@ -72,6 +73,7 @@ SWEETIFY_SWEETALERT_LIBRARY = 'sweetalert2'
 MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -82,32 +84,6 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'catalog.urls'
 
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-            #  activate for production environment For django-crispy-form
-            # 'loaders': [
-            #     (
-            #         'django.template.loaders.cached.Loader',
-            #         [
-            #             'django.template.loaders.filesystem.Loader',
-            #             'django.template.loaders.app_directories.Loader',
-            #             'path.to.custom.Loader',
-            #         ],
-            #     ),
-            # ],
-        },
-    },
-]
 
 WSGI_APPLICATION = 'catalog.wsgi.application'
 
@@ -121,17 +97,6 @@ WSGI_APPLICATION = 'catalog.wsgi.application'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
-
-DATABASES = {
-    'default': {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": config("POSTGRES_DB"),
-        "USER": config("POSTGRES_USER"),
-        "PASSWORD": config("POSTGRES_PASSWORD"),
-        "HOST": config("POSTGRES_HOST"),
-        "PORT": config("POSTGRES_PORT"),
-    }
-}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -168,7 +133,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static')
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 MEDIA_URL = '/media/' 
