@@ -1,5 +1,5 @@
 {% extends "common/base.html" %}
-{% block title %}Submit Photo{% endblock %}
+{% block title %}Edit Profile{% endblock %}
 
 {% block content %}
 <div class="container">
@@ -10,7 +10,7 @@
       </div>
       <div class="card">
         <div class="card-header">
-          <h5 class="card-title">Submit Photo</h5>
+          <h5 class="card-title">Edit Profile</h5>
         </div>
         <div class="card-body">
           <form action="{% url "accounts:edit" %}" method="post" enctype="multipart/form-data" class="form tm-contact-form">
