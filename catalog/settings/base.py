@@ -56,6 +56,7 @@ LOCAL_APPS = [
     'apps.common.apps.CommonConfig',
     'apps.general.apps.GeneralConfig',
     'apps.gallery.apps.GalleryConfig',
+    'apps.social_auth.apps.SocialAuthConfig',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
