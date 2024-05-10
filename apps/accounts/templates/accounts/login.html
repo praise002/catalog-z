@@ -56,6 +56,14 @@
         </button>
       </div>
     </form>
+
+    {% comment %} <a href="{% url 'social_auth:github_signup' %}"><button>Signin with Github</button></a> {% endcomment %}
+    {% comment %} <a href="https://github.com/login/oauth/authorize?scope=user,user:email&client_id={{ GITHUB_CLIENT_ID }}">
+      <button>Sign in with GitHub</button>
+    </a> {% endcomment %}
+    {% include "social_auth/auth.html" %}
+    {% comment %} BUG: Issue is with context {% endcomment %}
+    
   </div>
 
 </section>

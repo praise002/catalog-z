@@ -25,7 +25,7 @@ urlpatterns = [
     path('', include('apps.gallery.urls', namespace='gallery')),
     path('', include('apps.general.urls', namespace='general')),
     path('accounts/', include('apps.accounts.urls', namespace='accounts')),
-    path('social_auth/', include('apps.social_auth.urls', namespace='social_auth')),
+    path('', include('apps.social_auth.urls', namespace='social_auth')),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 

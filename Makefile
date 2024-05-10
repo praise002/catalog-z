@@ -41,10 +41,10 @@ sapp:
 	python manage.py startapp
 
 reqn:
-	python install -r requirements.txt
+	pip install -r requirements.txt
 
 ureqn:
-	python > requirements.txt
+	pip freeze > requirements.txt
 
 # DOCKER COMMANDS
 build:
