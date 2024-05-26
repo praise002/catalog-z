@@ -39,6 +39,7 @@ DJANGO_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.postgres',
+    'django_extensions', # for development only
 ]
 
 THIRD_PARTY_APPS = [

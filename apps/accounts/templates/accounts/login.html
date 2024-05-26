@@ -61,7 +61,7 @@
     {% comment %} <a href="https://github.com/login/oauth/authorize?scope=user,user:email&client_id={{ GITHUB_CLIENT_ID }}">
       <button>Sign in with GitHub</button>
     </a> {% endcomment %}
-    {% include "social_auth/auth.html" %}
+    {% include "social_auth/includes/auth_signup.html" %}
     {% comment %} BUG: Issue is with context {% endcomment %}
     
   </div>
@@ -75,5 +75,14 @@
   for(let input of inputs){
       input.classList.add("form-control");
   }
+
+  const fragment = window.location.hash.substr(1);            
+  const fragmentParams = fragment.split('&');
+  const keyValue = fragmentParams[1].split('=');
+  const key = keyValue[0];
+  const value = keyValue[1];
+  console.log(value)
+  window.location.href = `/google?access_token=${value}`;
 </script>
+
 {% endblock %}

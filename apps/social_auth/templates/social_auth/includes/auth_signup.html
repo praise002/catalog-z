@@ -1,3 +1,22 @@
-<a href="https://github.com/login/oauth/authorize?scope=user,user:email&client_id={{ GITHUB_CLIENT_ID }}">
+{% comment %} <a href="https://github.com/login/oauth/authorize?scope=user,user:email&client_id={{ GITHUB_CLIENT_ID }}">
   <button>Sign up with GitHub</button>
+</a> {% endcomment %}
+{% comment %} <a href="https://www.facebook.com/v19.0/dialog/oauth?client_id={{ FACEBOOK_APP_ID}}&redirect_uri={{FACEBOOK_REDIRECT_URL}}&scope=email+public_profile">
+  <button>Signin with Facebook</button>
+</a> {% endcomment %}
+
+<a href="https://www.facebook.com/v19.0/dialog/oauth?client_id={{ FACEBOOK_APP_ID}}&redirect_uri={{FACEBOOK_REDIRECT_URL}}">
+  <button>Signup with Facebook</button>
+</a>
+<a href="https://accounts.google.com/o/oauth2/v2/auth?scope=openid+profile+email&include_granted_scopes=true&response_type=token&state=state_parameter_passthrough_value&redirect_uri={{ GOOGLE_REDIRECT_URL }}&client_id={{ GOOGLE_CLIENT_ID }}">
+  <button>Signup with Google</button>
+</a>
+<a href="https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id={{ LINKEDIN_CLIENT_ID }}&redirect_uri={{ LINKEDIN_REDIRECT_URL }}&scope=openid+profile+email">
+  <button>Signup with Linkedin</button>
+</a>
+{% comment %} <a href="https://twitter.com/i/oauth2/authorize?response_type=code&client_id={{ TWITTER_CLIENT_ID }}&redirect_uri={{ TWITTER_REDIRECT_URL }}&scope=users.read%20offline.access&state=state&code_challenge=challenge&code_challenge_method=plain">
+  <button>Signup with Twitter</button>
+</a> {% endcomment %}
+<a href="">
+  <button>Signup with Twitter</button>
 </a>
