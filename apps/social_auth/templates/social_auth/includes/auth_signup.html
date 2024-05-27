@@ -17,6 +17,6 @@
 {% comment %} <a href="https://twitter.com/i/oauth2/authorize?response_type=code&client_id={{ TWITTER_CLIENT_ID }}&redirect_uri={{ TWITTER_REDIRECT_URL }}&scope=users.read%20offline.access&state=state&code_challenge=challenge&code_challenge_method=plain">
   <button>Signup with Twitter</button>
 </a> {% endcomment %}
-<a href="">
+<a href="{% url 'social_auth:twitter_signup' %}">
   <button>Signup with Twitter</button>
 </a>

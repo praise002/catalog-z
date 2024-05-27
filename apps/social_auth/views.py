@@ -324,8 +324,23 @@ def twitter_callback(request):
     response = requests.post(token_url, data=data, headers=headers)
     
     if response.status_code == 200:
-        tokens = response.json()
-        return redirect("gallery:home")
+        user_data = response.json()
+        name = user_data.get("name", "")
+        first_name, last_name = name.split(" ", 1)
+        email = user_data.get("email", "")
+        picture = user_data.get("profile_image_url", "")
+        user, created = User.objects.get_or_create(email=email, defaults={
+                "first_name": first_name,
+                "last_name": last_name
+            })
+        if created:
+            user.photo = picture
+            user.is_email_verified = True  
+            user.save()
+            SendEmail.welcome(request, user)
+        login(request, user)
+        return redirect("/")
+       
     else:
         sweetify.error(request, "Failed to obtain access token.")
         return redirect("accounts:login")

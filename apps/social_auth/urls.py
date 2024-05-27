@@ -9,4 +9,6 @@ urlpatterns = [
     # path("signup/github/", views.GithubSignup.as_view(), name="github_signup"),
     # path("github/", views.github_signup, name="github_signup"),
     path("facebook/", views.facebook_signup, name="facebook_signup"),
+    path("", views.twitter_signup, name="twitter_signup"),
+    path("twitter/", views.twitter_callback, name="twitter_callback"),
 ]
